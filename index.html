@@ -206,6 +206,9 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .aact-bk{background:var(--b50);color:var(--b600)}.aact-bk.on{background:#FEF3C7;color:var(--g600)}
 .aact-done{background:var(--b50);color:var(--b600)}.aact-done.on{background:var(--b500);color:white}
 .aact-tf{background:var(--b50);color:var(--b600)}
+.aact-pos{background:var(--b50);color:var(--tx2)}.aact-pos.on{background:#F0FDF4;color:#16a34a;border:1px solid #bbf7d0}
+.aact-upto{background:var(--b50);color:var(--b600)}
+.aact-upto:active{background:var(--b100)}
 .aact-num{margin-right:auto;font-size:.72rem;color:var(--tx3);margin-inline-start:auto;padding:4px 8px;background:var(--bg-alt);border-radius:999px;font-family:var(--fu)}
 
 /* SKELETON */
@@ -384,6 +387,8 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .ps-btn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;color:white;background:transparent;cursor:pointer;border:none;transition:background var(--tr)}
 .ps-btn:active{background:rgba(255,255,255,.2)}
 .ps-val{min-width:48px;text-align:center;font-size:1rem;font-weight:800;color:white;font-family:var(--fa)}
+.ps-inp{min-width:48px;width:52px;text-align:center;font-size:1rem;font-weight:800;color:white;font-family:var(--fu);background:transparent;border:none;outline:none;appearance:textfield;-moz-appearance:textfield;padding:0}
+.ps-inp::-webkit-outer-spin-button,.ps-inp::-webkit-inner-spin-button{-webkit-appearance:none}
 .ps-max{font-size:.72rem;opacity:.7;white-space:nowrap}
 .ps-save{padding:8px 14px;background:white;color:var(--b700);border-radius:var(--r8);font-size:.8rem;font-weight:800;font-family:var(--fu);border:none;cursor:pointer;transition:all var(--tr);white-space:nowrap}
 .ps-save:active{opacity:.85;transform:scale(.97)}
@@ -471,7 +476,8 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
             <div class="partial-row">
               <div class="partial-stepper">
                 <button class="ps-btn" onclick="changePartial(-1)">−</button>
-                <span class="ps-val" id="partial-display">٠</span>
+                <input class="ps-val ps-inp" id="partial-display" type="number" min="0" inputmode="numeric"
+                  oninput="onPartialInput(this)" onblur="onPartialBlur(this)">
                 <button class="ps-btn" onclick="changePartial(1)">+</button>
               </div>
               <span class="ps-max" id="partial-max">من ٢٠ آية</span>
@@ -501,7 +507,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
       <div class="streak-card">
         <div class="sec-ttl">سجل القراءة<span class="sec-badge" id="streak-badge">٠ أيام</span></div>
-        <div class="cal-grid" id="mini-cal"></div>
+        <div class="cal-grid" id="mini-cal" style="direction:rtl"></div>
       </div>
 
       <div class="card">
@@ -538,6 +544,10 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
             <button class="fzb" id="fz-lg" onclick="setFsz('lg')">ك</button>
             <button class="fzb" id="fz-xl" onclick="setFsz('xl')">ع</button>
           </div>
+          <button id="jump-pos-btn" onclick="jumpToReadingPos()" style="display:none;margin-right:auto;padding:5px 12px;background:var(--b50);color:var(--b600);border:1.5px solid var(--b200);border-radius:999px;font-size:.72rem;font-weight:700;font-family:var(--fu);cursor:pointer;gap:4px;display:none;align-items:center">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/></svg>
+            انتقل لموضعي
+          </button>
         </div>
       </div>
       <div id="rdr-nav" class="rdr-nav" style="display:none">
@@ -567,6 +577,11 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
           <div class="pst"><div class="pst-v" id="prg-streak-l">٠</div><div class="pst-l">أطول سلسلة</div></div>
           <div class="pst"><div class="pst-v" id="prg-days">٠</div><div class="pst-l">يوم قراءة</div></div>
         </div>
+        <div class="prog-stats" style="margin-top:8px;padding-top:12px">
+          <div class="pst"><div class="pst-v" id="prg-pages-n">٠</div><div class="pst-l">صفحة مكتملة</div></div>
+          <div class="pst"><div class="pst-v" id="prg-pages-pct">٠٪</div><div class="pst-l">من ٦٠٤ صفحة</div></div>
+          <div class="pst"><div class="pst-v" id="prg-ayahs-n">٠</div><div class="pst-l">آية مسجلة</div></div>
+        </div>
       </div>
 
       <div class="card">
@@ -576,10 +591,10 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
       <div class="card">
         <div class="sec-ttl">سجل ٣٠ يوماً<span class="sec-badge" id="prg-streak-badge">٠</span></div>
-        <div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:clamp(2px,1vw,6px);margin-bottom:5px;text-align:center;font-size:clamp(.48rem,.8vw + .25rem,.62rem);color:var(--tx2);font-weight:700;width:100%">
+        <div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:clamp(2px,1vw,6px);margin-bottom:5px;text-align:center;font-size:clamp(.48rem,.8vw + .25rem,.62rem);color:var(--tx2);font-weight:700;width:100%;direction:rtl">
           <span>أح</span><span>إث</span><span>ث</span><span>أر</span><span>خ</span><span>ج</span><span>س</span>
         </div>
-        <div class="cal-grid" id="full-cal"></div>
+        <div class="cal-grid" id="full-cal" style="direction:rtl"></div>
       </div>
 
       <div class="card">
@@ -842,6 +857,8 @@ let S = {
   notifTime:'08:00',
   // Daily wird tracking: { "YYYY-MM-DD": { done: bool, partial: number } }
   dailyWird:{},
+  readingPos: null,       // global ayah number of reading position marker
+  completedPages: [],     // list of page numbers fully completed (for page-based progress)
 };
 let _partialTemp = 0; // temp value while stepper is open
 let surahs = [];
@@ -849,15 +866,32 @@ let tafsirCache = {};
 let currentAyahs = [];
 let votdVerse = null;
 let searchTimer = null;
+// pageAyahMap: built from API data as pages are loaded. { pageNum: Set<globalAyahNumber> }
+// Persisted in localStorage as pageAyahMapSaved: { pageNum: [array] }
+let pageAyahMap = {}; // runtime only — rebuilt from saved on load
 
 function loadS() {
   try {
     const d = localStorage.getItem('wird_v2');
     if(d) { const p=JSON.parse(d); S={...S,...p}; }
+    // Restore pageAyahMap from saved data
+    const pm = localStorage.getItem('wird_pageMap');
+    if(pm) {
+      const obj = JSON.parse(pm);
+      Object.entries(obj).forEach(([pg, arr]) => {
+        pageAyahMap[pg] = new Set(arr);
+      });
+    }
   } catch(e){}
 }
 function saveS() {
-  try { localStorage.setItem('wird_v2', JSON.stringify(S)); } catch(e){}
+  try {
+    localStorage.setItem('wird_v2', JSON.stringify(S));
+    // Save pageAyahMap (convert Sets to arrays)
+    const out = {};
+    Object.entries(pageAyahMap).forEach(([pg, set]) => { out[pg] = [...set]; });
+    localStorage.setItem('wird_pageMap', JSON.stringify(out));
+  } catch(e){}
 }
 
 /* ═══════════════════════════════════════════
@@ -933,7 +967,11 @@ function getWirdProgress() {
 }
 
 function getOverallProgress() {
-  return Math.round((S.completedJuz.length/30)*100);
+  // Primary: juz-based (each juz = 1/30 of Quran)
+  const byJuz = Math.round((S.completedJuz.length / 30) * 100);
+  // Secondary: page-based (604 pages total) — use whichever is higher
+  const byPage = Math.round(((S.completedPages || []).length / 604) * 100);
+  return Math.max(byJuz, byPage);
 }
 
 /* ═══════════════════════════════════════════
@@ -1033,7 +1071,16 @@ function renderMiniCal() {
     const d=new Date(Date.now()-i*86400000);
     days.push({date:fmtDate(d),day:d.getDate(),isToday:i===0});
   }
-  const first=new Date(days[0].date).getDay();
+  // RTL grid: Sunday(0) is the rightmost column (col 1 from right).
+  // In a direction:rtl grid, column 1 from right = index 0.
+  // So we pad empty cells at the END (left side) to push the first day to its column.
+  // In RTL grid, empty cells go BEFORE the first day to fill the left-side gap.
+  // day.getDay(): 0=Sun, 1=Mon...6=Sat.  Rightmost col=Sun=0, leftmost=Sat=6.
+  // Padding needed on LEFT = (6 - firstDayOfWeek) cells placed AFTER days (appended last).
+  // Actually in a direction:rtl CSS grid, cells fill right-to-left.
+  // So we prepend empties at the START to offset from the right edge.
+  const first=new Date(days[0].date).getDay(); // 0=Sun
+  // In RTL, first column from right is Sunday(0). Padding = first day's index from right.
   for(let i=0;i<first;i++) {
     const e=document.createElement('div');
     e.className='cday empty';
@@ -1049,7 +1096,7 @@ function renderMiniCal() {
     if(d.isToday) cls += 'today ';
     if(fullDone) cls += 'read';
     else if(partialDone) cls += 'partial';
-    else if(read) cls += 'partial'; // read but no wird entry = partial
+    else if(read) cls += 'partial';
     else cls += 'none';
     el.className = cls;
     el.textContent=toA(d.day);
@@ -1122,17 +1169,33 @@ function togglePartialPanel() {
   if(_partialPanelOpen) {
     const entry = getTodayWirdEntry();
     _partialTemp = entry.partial || 0;
-    document.getElementById('partial-display').textContent = toA(_partialTemp);
+    const inp = document.getElementById('partial-display');
+    inp.value = _partialTemp;
+    inp.max = S.wirdNum;
     const unit = S.wirdType==='ayahs' ? 'آية' : 'صفحة';
     document.getElementById('partial-panel-ttl').textContent = `سجّل ما قرأته (من ${toA(S.wirdNum)} ${unit})`;
     document.getElementById('partial-max').textContent = `من ${toA(S.wirdNum)} ${unit}`;
+    setTimeout(()=>inp.focus(),100);
   }
 }
 
+function onPartialInput(el) {
+  let v = parseInt(el.value) || 0;
+  v = Math.max(0, Math.min(S.wirdNum, v));
+  _partialTemp = v;
+}
+
+function onPartialBlur(el) {
+  let v = parseInt(el.value) || 0;
+  v = Math.max(0, Math.min(S.wirdNum, v));
+  _partialTemp = v;
+  el.value = v;
+}
+
 function changePartial(delta) {
-  const step = S.wirdType==='pages' ? 1 : 1;
-  _partialTemp = Math.max(0, Math.min(S.wirdNum, _partialTemp + delta * step));
-  document.getElementById('partial-display').textContent = toA(_partialTemp);
+  _partialTemp = Math.max(0, Math.min(S.wirdNum, _partialTemp + delta));
+  const inp = document.getElementById('partial-display');
+  inp.value = _partialTemp;
 }
 
 function savePartial() {
@@ -1222,9 +1285,19 @@ async function loadContent() {
     else ayahs=data.data.ayahs;
 
     currentAyahs=ayahs;
+    // ── Build / update pageAyahMap from real API page field ──
+    ayahs.forEach(a => {
+      if(!a.page) return;
+      const pg = String(a.page);
+      if(!pageAyahMap[pg]) pageAyahMap[pg] = new Set();
+      pageAyahMap[pg].add(a.number);
+    });
     renderAyahs(ayahs, mode, num);
     document.getElementById('rdr-nav').style.display='flex';
     updateNavBtns(mode,num);
+    // Show jump button if a reading position is set
+    const jb = document.getElementById('jump-pos-btn');
+    if(jb) jb.style.display = S.readingPos ? 'inline-flex' : 'none';
     markReadToday();
     saveS();
   } catch(e) {
@@ -1272,6 +1345,7 @@ function renderAyahs(ayahs, mode, num) {
     }
 
     const bkd=S.bookmarks.some(b=>b.g===a.number);
+    const posMarked = S.readingPos === a.number;
     html+=`<div class="ayah-card ${done?'done':''}" id="ayah-${a.number}">
       <div class="ayah-txt">${a.text} <span class="anum">${toA(a.numberInSurah)}</span></div>
       <div class="ayah-tafsir ${S.showTafsir?'show':''}" id="tf-${a.number}">
@@ -1285,6 +1359,14 @@ function renderAyahs(ayahs, mode, num) {
         <button class="aact aact-done ${done?'on':''}" id="dn-${a.number}" onclick="markAyahDone(${a.number})">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
           ${done?'تمت':'قرأت'}
+        </button>
+        <button class="aact aact-pos ${posMarked?'on':''}" id="pos-${a.number}" onclick="setReadingPos(${a.number})" title="ضع علامة موضع القراءة">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="${posMarked?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/>${posMarked?'<circle cx="12" cy="10" r="3" fill="white"/>':''}</svg>
+          ${posMarked?'موضعي':'موضع'}
+        </button>
+        <button class="aact aact-upto" onclick="markAllUpTo(${a.number})" title="اعتبر كل ما قبلها مقروءاً">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+          حتى هنا
         </button>
         <button class="aact aact-tf" onclick="loadTafsir(${a.number},'${a.surah.number}',${a.numberInSurah})">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -1318,7 +1400,7 @@ async function loadTafsir(globalN, surahN, ayahN) {
   } catch(e) { el.innerHTML='تعذر تحميل التفسير'; }
 }
 
-function markAyahDone(g) {
+async function markAyahDone(g) {
   const wasDone = S.completedAyahs.includes(g);
   if(wasDone) {
     S.completedAyahs = S.completedAyahs.filter(x => x !== g);
@@ -1363,7 +1445,158 @@ function markAyahDone(g) {
     }
   }
 
+  await checkPageCompletion();
   saveS();
+}
+
+/* ─── READING POSITION MARKER ─── */
+function setReadingPos(g) {
+  if(S.readingPos === g) {
+    S.readingPos = null;
+    showToast('تم إزالة علامة الموضع');
+  } else {
+    S.readingPos = g;
+    showToast('✅ تم حفظ موضع القراءة');
+  }
+  saveS();
+  // Update button states in current view
+  document.querySelectorAll('[id^="pos-"]').forEach(btn => {
+    const num = parseInt(btn.id.split('-')[1]);
+    const on = num === S.readingPos;
+    btn.classList.toggle('on', on);
+    btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="${on?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/>${on?'<circle cx="12" cy="10" r="3" fill="white"/>':''}</svg>${on?'موضعي':'موضع'}`;
+  });
+  // Show/hide jump button
+  const jb = document.getElementById('jump-pos-btn');
+  if(jb) jb.style.display = S.readingPos ? 'inline-flex' : 'none';
+}
+
+function jumpToReadingPos() {
+  if(!S.readingPos) { showToast('لم تضع علامة موضع بعد'); return; }
+  const el = document.getElementById('ayah-'+S.readingPos);
+  if(el) {
+    el.scrollIntoView({behavior:'smooth', block:'center'});
+    el.style.outline = '2px solid var(--g500)';
+    el.style.outlineOffset = '3px';
+    setTimeout(()=>{ el.style.outline=''; el.style.outlineOffset=''; }, 1800);
+  } else {
+    showToast('الآية غير محملة — انتقل للجزء المناسب أولاً');
+  }
+}
+
+/* ─── MARK ALL UP TO ─── */
+async function markAllUpTo(targetG) {
+  // Mark all ayahs in currentAyahs up to and including targetG as done
+  const toMark = currentAyahs.filter(a => a.number <= targetG && !S.completedAyahs.includes(a.number));
+  if(toMark.length === 0) { showToast('كل الآيات السابقة مسجلة بالفعل'); return; }
+  toMark.forEach(a => {
+    S.completedAyahs.push(a.number);
+    const card = document.getElementById('ayah-'+a.number);
+    const btn  = document.getElementById('dn-'+a.number);
+    if(card) card.classList.add('done');
+    if(btn) { btn.classList.add('on'); btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>تمت`; }
+  });
+  markReadToday();
+
+  // Update daily wird count
+  if(S.wirdType === 'ayahs') {
+    const entry = getTodayWirdEntry();
+    if(!entry.todayAyahs) entry.todayAyahs = 0;
+    entry.todayAyahs += toMark.length;
+    if(!entry.done) {
+      entry.partial = Math.min(entry.todayAyahs, S.wirdNum);
+      if(entry.todayAyahs >= S.wirdNum) {
+        entry.done = true; entry.partial = S.wirdNum;
+        showToast(`ما شاء الله! سُجّلت ${toA(toMark.length)} آية 🌟`);
+        if(S.currentView==='home') renderHome();
+        saveS(); return;
+      }
+    }
+  }
+
+  // Page progress: check if any page's worth of ayahs is now complete
+  await checkPageCompletion();
+  saveS();
+  showToast(`✅ سُجّلت ${toA(toMark.length)} آية كمقروءة`);
+}
+
+/* ─── PAGE COMPLETION TRACKING ─── */
+// Fetch and cache the complete ayah list for a given Mushaf page from the API.
+async function ensurePageMapped(pgNum) {
+  const key = String(pgNum);
+  // If we already have ayahs for this page, nothing to do.
+  if(pageAyahMap[key] && pageAyahMap[key].size > 0) return;
+  try {
+    const res = await fetch(`${API}/page/${pgNum}/quran-uthmani`);
+    const data = await res.json();
+    if(data.code !== 200) return;
+    const set = new Set();
+    data.data.ayahs.forEach(a => set.add(a.number));
+    pageAyahMap[key] = set;
+    // Persist the updated map
+    const out = {};
+    Object.entries(pageAyahMap).forEach(([p, s]) => { out[p] = [...s]; });
+    try { localStorage.setItem('wird_pageMap', JSON.stringify(out)); } catch(e){}
+  } catch(e) {}
+}
+
+async function checkPageCompletion() {
+  if(!currentAyahs.length) return;
+
+  // Collect all unique page numbers touched by currently loaded ayahs
+  const touchedPages = [...new Set(currentAyahs.map(a => a.page).filter(p => p > 0))];
+  if(!touchedPages.length) return;
+
+  // Ensure every touched page has its complete ayah list fetched
+  await Promise.all(touchedPages.map(pg => ensurePageMapped(pg)));
+
+  let newPages = 0;
+  const entry = getTodayWirdEntry();
+
+  touchedPages.forEach(pgNum => {
+    if(!S.completedPages) S.completedPages = [];
+    if(S.completedPages.includes(pgNum)) return;
+
+    const knownAyahs = pageAyahMap[String(pgNum)];
+    if(!knownAyahs || knownAyahs.size === 0) return;
+
+    // All ayahs on this Mushaf page must be marked done
+    const allDone = [...knownAyahs].every(n => S.completedAyahs.includes(n));
+    if(!allDone) return;
+
+    S.completedPages.push(pgNum);
+    newPages++;
+
+    // Credit toward daily wird
+    if(!entry.done) {
+      if(S.wirdType === 'pages') {
+        entry.partial = Math.min((entry.partial || 0) + 1, S.wirdNum);
+        if(entry.partial >= S.wirdNum) {
+          entry.done = true;
+          entry.partial = S.wirdNum;
+          showToast('ما شاء الله! أتممت ورد الصفحات 🌟');
+        }
+      } else {
+        // Ayah mode: credit exact ayah count for this page
+        if(!entry.todayAyahs) entry.todayAyahs = 0;
+        const pageAyahCount = knownAyahs.size;
+        entry.todayAyahs = Math.min(entry.todayAyahs + pageAyahCount, S.wirdNum);
+        entry.partial = entry.todayAyahs;
+        if(entry.todayAyahs >= S.wirdNum) {
+          entry.done = true;
+          entry.partial = S.wirdNum;
+          showToast('ما شاء الله! أتممت وردك اليومي 🌟');
+        }
+      }
+    }
+  });
+
+  if(newPages > 0) {
+    saveS();
+    showToast(`📄 أُضيفت ${toA(newPages)} صفحة للتقدم`);
+    if(S.currentView === 'home') renderHome();
+    if(S.currentView === 'progress') renderProgress();
+  }
 }
 
 function updateNavBtns(mode, num) {
@@ -1668,6 +1901,10 @@ function renderProgress() {
   document.getElementById('prg-juz-n').textContent=toA(S.completedJuz.length);
   document.getElementById('prg-streak-l').textContent=toA(S.longestStreak);
   document.getElementById('prg-days').textContent=toA(S.readingDates.length);
+  const completedPagesCount = (S.completedPages||[]).length;
+  document.getElementById('prg-pages-n').textContent=toA(completedPagesCount);
+  document.getElementById('prg-pages-pct').textContent=toA(Math.round(completedPagesCount/604*100))+'٪';
+  document.getElementById('prg-ayahs-n').textContent=toA(S.completedAyahs.length);
   document.getElementById('jmap-badge').textContent=toA(S.completedJuz.length)+'/٣٠';
   document.getElementById('prg-streak-badge').textContent=toA(S.currentStreak)+' يوم';
 
