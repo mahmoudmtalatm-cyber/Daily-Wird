@@ -50,7 +50,24 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 @keyframes bounce{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(-12px);opacity:1}}
 
 /* APP */
-#app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;max-width:500px;margin:0 auto}
+#app{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;max-width:600px;margin:0 auto}
+@media(min-width:600px){
+  #app{max-width:720px}
+  .stats-row{grid-template-columns:repeat(3,1fr)}
+  .juz-mini{grid-template-columns:repeat(8,1fr)}
+  .juz-map-grid{grid-template-columns:repeat(6,1fr)}
+  .ach-grid{grid-template-columns:repeat(4,1fr)}
+  .wird{padding:26px 28px}
+  .wird-ttl{font-size:2.2rem}
+  .plan-grid{grid-template-columns:repeat(4,1fr)}
+}
+@media(min-width:900px){
+  #app{max-width:860px}
+  .juz-mini{grid-template-columns:repeat(10,1fr)}
+  .juz-map-grid{grid-template-columns:repeat(10,1fr)}
+  .ach-grid{grid-template-columns:repeat(5,1fr)}
+  #main{padding:20px 24px 100px}
+}
 
 /* HEADER */
 #hdr{position:sticky;top:0;z-index:100;height:var(--hdr);background:rgba(255,255,255,.88);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--border-soft);display:flex;align-items:center;justify-content:space-between;padding:0 16px;transition:background var(--tr)}
@@ -67,7 +84,9 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 #main{flex:1;overflow-y:auto;padding:16px 16px 84px;-webkit-overflow-scrolling:touch}
 
 /* NAV */
-#bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:500px;height:var(--nav);background:rgba(255,255,255,.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border-soft);display:flex;align-items:center;z-index:100;padding:0 6px;box-shadow:0 -4px 20px rgba(30,58,95,.06)}
+#bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:600px;height:var(--nav);background:rgba(255,255,255,.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border-soft);display:flex;align-items:center;z-index:100;padding:0 6px;box-shadow:0 -4px 20px rgba(30,58,95,.06)}
+@media(min-width:600px){#bnav{max-width:720px}}
+@media(min-width:900px){#bnav{max-width:860px}}
 .dark #bnav{background:rgba(15,23,42,.94)}
 .ni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:100%;border-radius:var(--r12);cursor:pointer;color:var(--tx3);padding:8px 4px;transition:all var(--tr)}
 .ni.on{color:var(--b600)}.dark .ni.on{color:var(--b400)}
@@ -119,8 +138,6 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .votd-txt{font-family:var(--fq);font-size:1.25rem;line-height:2.3;color:var(--tx);margin-bottom:12px;direction:rtl;position:relative;z-index:1}
 .votd-bot{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1}
 .votd-ref{font-size:.78rem;color:var(--tx2)}
-.votd-play{display:flex;align-items:center;gap:6px;color:var(--b500);font-size:.78rem;cursor:pointer;padding:5px 10px;border-radius:999px;background:var(--b50);transition:all var(--tr);border:none;font-family:var(--fu)}
-.votd-play:active{background:var(--b100)}
 
 /* STREAK CARD */
 .streak-card{background:var(--surface);border-radius:var(--r28);padding:20px;border:1px solid var(--border-soft);box-shadow:var(--sh1);margin-bottom:14px}
@@ -175,7 +192,6 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .ayah-card{background:var(--surface);border-radius:var(--r20);padding:16px;border:1.5px solid var(--border-soft);transition:all var(--tr);position:relative}
 .ayah-card.done{border-color:var(--b200);background:var(--b50)}
 .dark .ayah-card.done{background:rgba(59,130,246,.07);border-color:rgba(59,130,246,.2)}
-.ayah-card.playing{border-color:var(--g400);box-shadow:0 0 0 3px rgba(245,158,11,.15)}
 .ayah-txt{font-family:var(--fq);line-height:2.4;direction:rtl;text-align:right;margin-bottom:12px;transition:font-size var(--tr)}
 .font-sm .ayah-txt{font-size:1.1rem}
 .font-md .ayah-txt{font-size:1.3rem}
@@ -187,7 +203,6 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .dark .anum{background:rgba(59,130,246,.2);color:var(--b300)}
 .ayah-acts{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
 .aact{display:flex;align-items:center;gap:4px;padding:5px 10px;border-radius:999px;font-size:.72rem;font-weight:600;transition:all var(--tr);font-family:var(--fu);cursor:pointer;border:none}
-.aact-play{background:var(--b50);color:var(--b600)}.aact-play:active,.aact-play.playing{background:var(--g400);color:white}
 .aact-bk{background:var(--b50);color:var(--b600)}.aact-bk.on{background:#FEF3C7;color:var(--g600)}
 .aact-done{background:var(--b50);color:var(--b600)}.aact-done.on{background:var(--b500);color:white}
 .aact-tf{background:var(--b50);color:var(--b600)}
@@ -288,19 +303,6 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .plan-days{font-size:1.4rem;font-weight:800;color:var(--b600);display:block;line-height:1.1}
 .plan-lbl{font-size:.72rem;color:var(--tx2);margin-top:3px;display:block}
 
-/* AUDIO BAR */
-#abar{position:fixed;bottom:72px;left:50%;transform:translateX(-50%) translateY(90px);width:calc(100% - 32px);max-width:468px;background:var(--surface);border-radius:var(--r20);padding:12px 16px;box-shadow:0 8px 32px rgba(30,58,95,.18);border:1px solid var(--border-soft);display:flex;align-items:center;gap:12px;z-index:200;transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
-#abar.show{transform:translateX(-50%) translateY(0)}
-.abar-info{flex:1;min-width:0}
-.abar-ttl{font-size:.85rem;font-weight:700;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.abar-sub{font-size:.7rem;color:var(--tx2)}
-.abar-prog{height:3px;background:var(--border);border-radius:999px;margin-top:6px;overflow:hidden}
-.abar-prog-fill{height:100%;background:var(--b500);border-radius:999px;width:0%;transition:width .5s linear}
-.abar-ctrl{display:flex;align-items:center;gap:6px}
-.abar-btn{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all var(--tr);border:none}
-.abar-play{background:var(--b500);color:white}.abar-play:active{background:var(--b600);transform:scale(.92)}
-.abar-close{background:var(--bg-alt);color:var(--tx2)}.abar-close:active{background:var(--border)}
-
 /* TOAST */
 #toast{position:fixed;top:70px;left:50%;transform:translateX(-50%) translateY(-80px);background:rgba(30,58,95,.95);color:white;padding:10px 22px;border-radius:999px;font-size:.84rem;font-weight:600;z-index:9998;transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .3s;white-space:nowrap;box-shadow:var(--sh3);pointer-events:none;backdrop-filter:blur(10px)}
 #toast.show{transform:translateX(-50%) translateY(0)}
@@ -316,8 +318,56 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:999px}
 
-/* RESPONSIVE */
-@media(min-width:420px){
+/* WIRD SETTINGS MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.5);backdrop-filter:blur(4px);z-index:500;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal-sheet{background:var(--surface);border-radius:var(--r28) var(--r28) 0 0;padding:24px 20px 40px;width:100%;max-width:600px;transform:translateY(100%);transition:transform .35s cubic-bezier(.34,1.2,.64,1);box-shadow:0 -8px 40px rgba(30,58,95,.18)}
+@media(min-width:600px){.modal-sheet{max-width:720px}}
+@media(min-width:900px){.modal-sheet{max-width:860px}}
+.modal-overlay.open .modal-sheet{transform:translateY(0)}
+.modal-drag{width:40px;height:4px;background:var(--border);border-radius:999px;margin:0 auto 20px}
+.modal-ttl{font-family:var(--fa);font-size:1.3rem;font-weight:700;color:var(--tx);margin-bottom:20px;text-align:center}
+.wird-set-group{margin-bottom:18px}
+.wird-set-lbl{font-size:.78rem;font-weight:700;color:var(--tx2);letter-spacing:.05em;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.wird-type-row{display:flex;gap:8px;margin-bottom:8px}
+.wird-type-btn{flex:1;padding:10px;border-radius:var(--r12);border:2px solid var(--border);background:var(--surface-tinted);color:var(--tx2);font-size:.84rem;font-weight:700;font-family:var(--fu);cursor:pointer;transition:all var(--tr);text-align:center}
+.wird-type-btn.on{border-color:var(--b500);background:var(--b50);color:var(--b700)}
+.dark .wird-type-btn.on{background:rgba(59,130,246,.12);color:var(--b300)}
+.wird-num-row{display:flex;align-items:center;gap:10px}
+.wird-stepper{display:flex;align-items:center;gap:0;border:2px solid var(--border);border-radius:var(--r12);overflow:hidden;background:var(--surface)}
+.ws-btn{width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:700;color:var(--b600);background:var(--surface-tinted);cursor:pointer;border:none;transition:background var(--tr)}
+.ws-btn:active{background:var(--b50)}
+.ws-val{min-width:60px;text-align:center;font-size:1.2rem;font-weight:800;color:var(--tx);font-family:var(--fa);padding:0 8px}
+.notif-row{display:flex;align-items:center;gap:10px}
+.notif-time-input{flex:1;padding:10px 14px;border-radius:var(--r12);border:2px solid var(--border);background:var(--surface-tinted);color:var(--tx);font-size:1rem;font-family:var(--fu);outline:none;transition:border-color var(--tr);direction:ltr;text-align:center}
+.notif-time-input:focus{border-color:var(--b400)}
+.notif-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0}
+.notif-lbl{font-size:.88rem;font-weight:600;color:var(--tx)}
+.modal-save{width:100%;padding:14px;background:linear-gradient(135deg,var(--b600),var(--b500));color:white;border-radius:var(--r20);font-size:1rem;font-weight:800;font-family:var(--fu);cursor:pointer;border:none;margin-top:4px;transition:all var(--tr);box-shadow:0 4px 16px rgba(37,99,235,.3)}
+.modal-save:active{transform:scale(.98);opacity:.9}
+.wird-badge{display:inline-flex;align-items:center;gap:5px;font-size:.72rem;color:var(--b600);font-weight:700;background:var(--b50);padding:3px 10px;border-radius:999px;cursor:pointer;border:1.5px solid var(--b200);transition:all var(--tr)}
+.wird-badge:active{background:var(--b100)}
+.dark .wird-badge{background:rgba(59,130,246,.12);border-color:rgba(59,130,246,.25);color:var(--b300)}
+
+/* WIRD DONE STATE */
+.wird.done-full{background:linear-gradient(135deg,#059669 0%,#10B981 55%,#34D399 100%);box-shadow:0 8px 32px rgba(5,150,105,.35)}
+.wird.done-partial{background:linear-gradient(135deg,#0369A1 0%,#0284C7 55%,#38BDF8 100%);box-shadow:0 8px 32px rgba(3,105,161,.35)}
+.wbtn-done{background:white;color:#059669;border:none;font-weight:800}
+.wbtn-done:active{transform:scale(.97)}
+.wbtn-undo{background:rgba(255,255,255,.15);color:white;border:1px solid rgba(255,255,255,.35);font-size:.78rem;padding:8px 10px}
+
+/* PARTIAL INPUT PANEL */
+.partial-panel{background:rgba(255,255,255,.12);border-radius:var(--r12);padding:12px;margin-top:10px;border:1px solid rgba(255,255,255,.2)}
+.partial-panel-ttl{font-size:.75rem;opacity:.85;margin-bottom:8px;font-weight:600}
+.partial-row{display:flex;align-items:center;gap:8px}
+.partial-stepper{display:flex;align-items:center;gap:0;background:rgba(255,255,255,.15);border-radius:var(--r8);overflow:hidden;border:1px solid rgba(255,255,255,.25)}
+.ps-btn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;color:white;background:transparent;cursor:pointer;border:none;transition:background var(--tr)}
+.ps-btn:active{background:rgba(255,255,255,.2)}
+.ps-val{min-width:48px;text-align:center;font-size:1rem;font-weight:800;color:white;font-family:var(--fa)}
+.ps-max{font-size:.72rem;opacity:.7;white-space:nowrap}
+.ps-save{padding:8px 14px;background:white;color:var(--b700);border-radius:var(--r8);font-size:.8rem;font-weight:800;font-family:var(--fu);border:none;cursor:pointer;transition:all var(--tr);white-space:nowrap}
+.ps-save:active{opacity:.85;transform:scale(.97)}
+@media (min-width:768px){
   .font-sm .ayah-txt{font-size:1.15rem}
   .font-md .ayah-txt{font-size:1.4rem}
   .font-lg .ayah-txt{font-size:1.65rem}
@@ -392,9 +442,25 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
             <div class="wird-bar"><div class="wird-fill" id="wird-fill" style="width:0%"></div></div>
             <span class="wird-pct" id="wird-pct">٠٪</span>
           </div>
-          <div class="wird-acts">
+          <div class="wird-acts" id="wird-acts-main">
             <button class="wbtn wbtn-p" onclick="continueReading()">▶ متابعة القراءة</button>
-            <button class="wbtn wbtn-s" onclick="markWirdDone()">✓ تم اليوم</button>
+            <button class="wbtn wbtn-s" id="wird-done-btn" onclick="toggleWirdDone()">✓ أتممت وردي</button>
+          </div>
+          <div id="partial-panel" class="partial-panel" style="display:none">
+            <div class="partial-panel-ttl" id="partial-panel-ttl">سجّل ما قرأته اليوم</div>
+            <div class="partial-row">
+              <div class="partial-stepper">
+                <button class="ps-btn" onclick="changePartial(-1)">−</button>
+                <span class="ps-val" id="partial-display">٠</span>
+                <button class="ps-btn" onclick="changePartial(1)">+</button>
+              </div>
+              <span class="ps-max" id="partial-max">من ٢٠ آية</span>
+              <button class="ps-save" onclick="savePartial()">حفظ</button>
+            </div>
+          </div>
+          <div style="margin-top:10px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+            <button class="wird-badge" onclick="openWirdModal()">⚙️ ضبط الورد · <span id="wird-config-lbl">٢٠ آية/يوم</span></button>
+            <button class="wird-badge" id="partial-toggle-btn" onclick="togglePartialPanel()" style="display:none">✏️ سجّل جزئياً</button>
           </div>
         </div>
       </div>
@@ -410,10 +476,6 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
         <div class="votd-txt" id="votd-txt"><div class="skel" style="height:70px"></div></div>
         <div class="votd-bot">
           <span class="votd-ref" id="votd-ref"></span>
-          <button class="votd-play" id="votd-play-btn" onclick="playVotd()">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v9.28a4.39 4.39 0 0 0-1.5-.28C8.01 12 6 14.01 6 16.5S8.01 21 10.5 21c2.31 0 4.2-1.75 4.45-4H15V6h4V3h-7z"/></svg>
-            استمع
-          </button>
         </div>
       </div>
 
@@ -550,19 +612,11 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       </div>
 
       <div class="set-sec">
-        <div class="set-sec-ttl">التلاوة</div>
-        <div class="set-item">
-          <div class="set-icon">🎙️</div>
-          <div class="set-cnt"><div class="set-ttl">القارئ</div><div class="set-sub">اختر صوت القارئ</div></div>
-          <div class="set-right">
-            <select id="rec-sel" style="background:var(--bg-alt);border:1.5px solid var(--border);border-radius:8px;padding:5px 8px;font-family:var(--fu);font-size:.78rem;color:var(--tx);outline:none;cursor:pointer;direction:rtl" onchange="setReciter(this.value)">
-              <option value="ar.alafasy">مشاري راشد العفاسي</option>
-              <option value="ar.abdurrahmaansudais">عبدالرحمن السديس</option>
-              <option value="ar.husary">محمود خليل الحصري</option>
-              <option value="ar.minshawi">محمد صديق المنشاوي</option>
-              <option value="ar.ahmedajamy">أحمد العجمي</option>
-            </select>
-          </div>
+        <div class="set-sec-ttl">الورد اليومي</div>
+        <div class="set-item" onclick="openWirdModal()">
+          <div class="set-icon">📖</div>
+          <div class="set-cnt"><div class="set-ttl">ضبط الورد</div><div class="set-sub" id="wird-settings-sub">٢٠ آية/يوم · بدون تذكير</div></div>
+          <div class="set-right">ضبط ←</div>
         </div>
       </div>
 
@@ -624,20 +678,43 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
   </nav>
 </div>
 
-<!-- AUDIO BAR -->
-<div id="abar">
-  <div class="abar-info">
-    <div class="abar-ttl" id="abar-ttl">جاري التشغيل...</div>
-    <div class="abar-sub" id="abar-sub"></div>
-    <div class="abar-prog"><div class="abar-prog-fill" id="abar-prog"></div></div>
-  </div>
-  <div class="abar-ctrl">
-    <button class="abar-btn abar-play" id="abar-play" onclick="togglePlay()">
-      <svg id="abar-ico" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l15 8-15 8z"/></svg>
-    </button>
-    <button class="abar-btn abar-close" onclick="stopAudio()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
+<!-- WIRD SETTINGS MODAL -->
+<div class="modal-overlay" id="wird-modal" onclick="closeWirdModal(event)">
+  <div class="modal-sheet">
+    <div class="modal-drag"></div>
+    <div class="modal-ttl">⚙️ ضبط الورد اليومي</div>
+
+    <div class="wird-set-group">
+      <div class="wird-set-lbl">📐 نوع الورد</div>
+      <div class="wird-type-row">
+        <button class="wird-type-btn on" id="wt-ayahs" onclick="setWirdType('ayahs')">بالآيات</button>
+        <button class="wird-type-btn" id="wt-pages" onclick="setWirdType('pages')">بالصفحات</button>
+      </div>
+    </div>
+
+    <div class="wird-set-group">
+      <div class="wird-set-lbl" id="wird-num-lbl">📖 عدد الآيات يومياً</div>
+      <div class="wird-num-row">
+        <div class="wird-stepper">
+          <button class="ws-btn" onclick="changeWirdNum(-1)">−</button>
+          <span class="ws-val" id="ws-display">٢٠</span>
+          <button class="ws-btn" onclick="changeWirdNum(1)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="wird-set-group">
+      <div class="notif-toggle-row">
+        <span class="notif-lbl">🔔 تذكير يومي بالورد</span>
+        <div class="toggle" id="tog-notif" onclick="toggleNotif()"></div>
+      </div>
+      <div id="notif-time-wrap" style="display:none;margin-top:10px">
+        <div class="wird-set-lbl">🕐 وقت التذكير</div>
+        <input type="time" class="notif-time-input" id="notif-time-input" value="08:00">
+      </div>
+    </div>
+
+    <button class="modal-save" onclick="saveWirdSettings()">حفظ الإعدادات ✓</button>
   </div>
 </div>
 
@@ -649,7 +726,6 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
    CONSTANTS
 ═══════════════════════════════════════════ */
 const API = 'https://api.alquran.cloud/v1';
-const CDN = 'https://cdn.islamic.network/quran/audio/128';
 
 const JUZ_INFO = [
   {n:1,s:'الفاتحة ١',e:'البقرة ١٤١'},{n:2,s:'البقرة ١٤٢',e:'البقرة ٢٥٢'},
@@ -682,14 +758,6 @@ const VOTD_POOL = [
   {g:3262,txt:'إِنَّ مَعَ ٱلْعُسْرِ يُسْرًا',ref:'الانشراح: ٦'},
 ];
 
-const RECITERS = {
-  'ar.alafasy':'alafasy',
-  'ar.abdurrahmaansudais':'abdurrahmaansudais',
-  'ar.husary':'husary',
-  'ar.minshawi':'minshawi',
-  'ar.ahmedajamy':'ahmedajamy'
-};
-
 const ACHIEVEMENTS = [
   {id:'first',icon:'🌱',name:'الأولى',desc:'أول يوم',check:s=>s.readingDates.length>=1},
   {id:'week',icon:'⭐',name:'أسبوع',desc:'٧ أيام',check:s=>s.currentStreak>=7},
@@ -721,12 +789,18 @@ let S = {
   lastJuz:1, lastSurah:1,
   currentView:'home',
   rdrMode:'juz', currentRdrNum:1,
+  // Wird custom settings
+  wirdType:'ayahs',   // 'ayahs' | 'pages'
+  wirdNum:20,         // daily target count
+  notifEnabled:false,
+  notifTime:'08:00',
+  // Daily wird tracking: { "YYYY-MM-DD": { done: bool, partial: number } }
+  dailyWird:{},
 };
+let _partialTemp = 0; // temp value while stepper is open
 let surahs = [];
 let tafsirCache = {};
 let currentAyahs = [];
-let audio = new Audio();
-let playingGlobal = null;
 let votdVerse = null;
 let searchTimer = null;
 
@@ -795,15 +869,17 @@ function getTodayWird() {
   }
 }
 
+function getTodayWirdEntry() {
+  const t = today();
+  if(!S.dailyWird[t]) S.dailyWird[t] = {done:false, partial:0};
+  return S.dailyWird[t];
+}
+
 function getWirdProgress() {
-  const w=getTodayWird();
-  if(w.type==='juz') {
-    return S.completedJuz.includes(w.num)?100:0;
-  } else if(w.juzList) {
-    const done=w.juzList.filter(j=>S.completedJuz.includes(j)).length;
-    return Math.round((done/w.juzList.length)*100);
-  }
-  return 0;
+  const entry = getTodayWirdEntry();
+  if(entry.done) return 100;
+  if(!S.wirdNum) return 0;
+  return Math.min(100, Math.round((entry.partial / S.wirdNum) * 100));
 }
 
 function getOverallProgress() {
@@ -845,12 +921,36 @@ function renderHome() {
   document.getElementById('greet-time').textContent = gr.t;
   document.getElementById('greet-text').textContent = gr.g;
 
-  const w=getTodayWird();
-  document.getElementById('wird-ttl').textContent = w.label;
-  document.getElementById('wird-sub').textContent = `${w.info.s} — ${w.info.e}`;
-  const pct=getWirdProgress();
-  document.getElementById('wird-fill').style.width=pct+'%';
-  document.getElementById('wird-pct').textContent=toA(pct)+'٪';
+  // Wird card title uses custom wird settings
+  const unit = S.wirdType==='ayahs' ? 'آية' : 'صفحة';
+  document.getElementById('wird-ttl').textContent = `${toA(S.wirdNum)} ${unit}`;
+  const entry = getTodayWirdEntry();
+  const partial = entry.partial || 0;
+  const done = entry.done;
+  document.getElementById('wird-sub').textContent = done
+    ? 'أحسنت! أتممت ورد اليوم 🌟'
+    : partial > 0
+      ? `قرأت ${toA(partial)} من ${toA(S.wirdNum)} ${unit}`
+      : `هدفك اليوم ${toA(S.wirdNum)} ${unit}`;
+  const pct = getWirdProgress();
+  document.getElementById('wird-fill').style.width = pct+'%';
+  document.getElementById('wird-pct').textContent = toA(pct)+'٪';
+
+  // Card color & button states
+  const card = document.getElementById('wird-card');
+  card.classList.toggle('done-full', done);
+  card.classList.toggle('done-partial', !done && partial > 0);
+  const doneBtn = document.getElementById('wird-done-btn');
+  if(done) {
+    doneBtn.textContent = '↩ إلغاء الإتمام';
+    doneBtn.className = 'wbtn wbtn-undo';
+  } else {
+    doneBtn.textContent = '✓ أتممت وردي';
+    doneBtn.className = 'wbtn wbtn-s';
+  }
+  // Show partial button only when not fully done
+  const partialBtn = document.getElementById('partial-toggle-btn');
+  if(partialBtn) partialBtn.style.display = done ? 'none' : 'inline-flex';
 
   calcStreak();
   document.getElementById('st-streak').textContent=toA(S.currentStreak);
@@ -873,11 +973,6 @@ function renderVotd() {
   document.getElementById('votd-ref').textContent='سورة '+v.ref;
 }
 
-function playVotd() {
-  if(!votdVerse) return;
-  playAyah(votdVerse.g, 'آية اليوم', votdVerse.ref);
-}
-
 function renderMiniCal() {
   const cal=document.getElementById('mini-cal');
   cal.innerHTML='';
@@ -894,8 +989,17 @@ function renderMiniCal() {
   }
   days.forEach(d=>{
     const el=document.createElement('div');
-    const read=S.readingDates.includes(d.date);
-    el.className='cday '+(d.isToday?'today ':'')+(read?'read':'none');
+    const entry = S.dailyWird[d.date];
+    const fullDone = entry && entry.done;
+    const partialDone = entry && !entry.done && entry.partial > 0;
+    const read = S.readingDates.includes(d.date);
+    let cls = 'cday ';
+    if(d.isToday) cls += 'today ';
+    if(fullDone) cls += 'read';
+    else if(partialDone) cls += 'partial';
+    else if(read) cls += 'partial'; // read but no wird entry = partial
+    else cls += 'none';
+    el.className = cls;
     el.textContent=toA(d.day);
     cal.appendChild(el);
   });
@@ -936,17 +1040,61 @@ function openJuz(n) {
   loadContent();
 }
 
-function markWirdDone() {
-  const w=getTodayWird();
-  if(w.type==='juz') {
-    if(!S.completedJuz.includes(w.num)) S.completedJuz.push(w.num);
-  } else if(w.juzList) {
-    w.juzList.forEach(j=>{ if(!S.completedJuz.includes(j)) S.completedJuz.push(j); });
+function toggleWirdDone() {
+  const entry = getTodayWirdEntry();
+  if(entry.done) {
+    // Undo: unmark as done, keep partial at wirdNum so bar stays full until they change it
+    entry.done = false;
+    entry.partial = S.wirdNum; // keep progress visual
+    // Also unmark today from readingDates if they want — we keep it, reading happened
+    saveS();
+    renderHome();
+    showToast('تم إلغاء إتمام الورد');
+  } else {
+    // Mark full done
+    entry.done = true;
+    entry.partial = S.wirdNum;
+    markReadToday();
+    saveS();
+    renderHome();
+    showToast('ما شاء الله! أتممت ورد اليوم 🌟');
   }
-  markReadToday();
+}
+
+let _partialPanelOpen = false;
+
+function togglePartialPanel() {
+  _partialPanelOpen = !_partialPanelOpen;
+  const panel = document.getElementById('partial-panel');
+  panel.style.display = _partialPanelOpen ? 'block' : 'none';
+  if(_partialPanelOpen) {
+    const entry = getTodayWirdEntry();
+    _partialTemp = entry.partial || 0;
+    document.getElementById('partial-display').textContent = toA(_partialTemp);
+    const unit = S.wirdType==='ayahs' ? 'آية' : 'صفحة';
+    document.getElementById('partial-panel-ttl').textContent = `سجّل ما قرأته (من ${toA(S.wirdNum)} ${unit})`;
+    document.getElementById('partial-max').textContent = `من ${toA(S.wirdNum)} ${unit}`;
+  }
+}
+
+function changePartial(delta) {
+  const step = S.wirdType==='pages' ? 1 : 1;
+  _partialTemp = Math.max(0, Math.min(S.wirdNum, _partialTemp + delta * step));
+  document.getElementById('partial-display').textContent = toA(_partialTemp);
+}
+
+function savePartial() {
+  const entry = getTodayWirdEntry();
+  entry.partial = _partialTemp;
+  entry.done = (_partialTemp >= S.wirdNum);
+  if(entry.partial > 0) markReadToday();
   saveS();
+  _partialPanelOpen = false;
+  document.getElementById('partial-panel').style.display = 'none';
   renderHome();
-  showToast('أحسنت! تم تسجيل ورد اليوم ✓');
+  const unit = S.wirdType==='ayahs' ? 'آية' : 'صفحة';
+  if(entry.done) showToast('ما شاء الله! أتممت ورد اليوم 🌟');
+  else showToast(`تم حفظ: ${toA(_partialTemp)} ${unit} من ${toA(S.wirdNum)}`);
 }
 
 /* ═══════════════════════════════════════════
@@ -1078,9 +1226,6 @@ function renderAyahs(ayahs, mode, num) {
         <span style="opacity:.5">جاري تحميل التفسير...</span>
       </div>
       <div class="ayah-acts">
-        <button class="aact aact-play" id="pb-${a.number}" onclick="playAyah(${a.number},'${a.surah.name}','آية ${toA(a.numberInSurah)}')">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> استمع
-        </button>
         <button class="aact aact-bk ${bkd?'on':''}" id="bk-${a.number}" onclick="toggleBookmark(${a.number},'${a.surah.name}',${a.numberInSurah},'${encodeURIComponent(a.text)}')">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="${bkd?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
           ${bkd?'محفوظ':'حفظ'}
@@ -1173,79 +1318,113 @@ function setFsz(s) {
 }
 
 /* ═══════════════════════════════════════════
-   AUDIO
+   WIRD SETTINGS & NOTIFICATIONS
 ═══════════════════════════════════════════ */
-function playAyah(g, surahName, ayahRef) {
-  const reciter=RECITERS[S.reciter]||'alafasy';
-  const url=`${CDN}/${reciter}/${g}.mp3`;
+function openWirdModal() {
+  // Sync modal UI with current state
+  document.getElementById('wt-ayahs').classList.toggle('on', S.wirdType==='ayahs');
+  document.getElementById('wt-pages').classList.toggle('on', S.wirdType==='pages');
+  document.getElementById('ws-display').textContent = toA(S.wirdNum);
+  document.getElementById('wird-num-lbl').textContent = S.wirdType==='ayahs' ? '📖 عدد الآيات يومياً' : '📄 عدد الصفحات يومياً';
+  document.getElementById('tog-notif').classList.toggle('on', S.notifEnabled);
+  document.getElementById('notif-time-input').value = S.notifTime;
+  document.getElementById('notif-time-wrap').style.display = S.notifEnabled ? 'block' : 'none';
+  document.getElementById('wird-modal').classList.add('open');
+}
 
-  if(playingGlobal===g && !audio.paused) { audio.pause(); updatePlayBtns(g,false); return; }
-
-  if(playingGlobal && playingGlobal!==g) {
-    updatePlayBtns(playingGlobal,false);
-    const oldCard=document.getElementById('ayah-'+playingGlobal);
-    if(oldCard) oldCard.classList.remove('playing');
+function closeWirdModal(e) {
+  if(e.target === document.getElementById('wird-modal')) {
+    document.getElementById('wird-modal').classList.remove('open');
   }
+}
 
-  playingGlobal=g;
-  audio.src=url;
-  audio.play().catch(()=>{});
+function setWirdType(t) {
+  S.wirdType = t;
+  document.getElementById('wt-ayahs').classList.toggle('on', t==='ayahs');
+  document.getElementById('wt-pages').classList.toggle('on', t==='pages');
+  document.getElementById('wird-num-lbl').textContent = t==='ayahs' ? '📖 عدد الآيات يومياً' : '📄 عدد الصفحات يومياً';
+  // Adjust sensible default
+  if(t==='pages' && S.wirdNum > 30) { S.wirdNum=5; document.getElementById('ws-display').textContent=toA(5); }
+  if(t==='ayahs' && S.wirdNum < 5) { S.wirdNum=20; document.getElementById('ws-display').textContent=toA(20); }
+}
 
-  const card=document.getElementById('ayah-'+g);
-  if(card) card.classList.add('playing');
-  updatePlayBtns(g,true);
+function changeWirdNum(delta) {
+  const min = S.wirdType==='pages' ? 1 : 1;
+  const max = S.wirdType==='pages' ? 30 : 300;
+  const step = S.wirdType==='pages' ? 1 : 5;
+  S.wirdNum = Math.max(min, Math.min(max, S.wirdNum + delta * step));
+  document.getElementById('ws-display').textContent = toA(S.wirdNum);
+}
 
-  document.getElementById('abar-ttl').textContent=surahName;
-  document.getElementById('abar-sub').textContent=ayahRef;
-  document.getElementById('abar').classList.add('show');
-
-  audio.ontimeupdate=()=>{
-    if(audio.duration){
-      const p=(audio.currentTime/audio.duration)*100;
-      document.getElementById('abar-prog').style.width=p+'%';
+function toggleNotif() {
+  if(!S.notifEnabled) {
+    // Request permission first
+    if('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission().then(perm => {
+        if(perm === 'granted') {
+          S.notifEnabled = true;
+          document.getElementById('tog-notif').classList.add('on');
+          document.getElementById('notif-time-wrap').style.display = 'block';
+        } else {
+          showToast('لم يتم السماح بالإشعارات');
+        }
+      });
+      return;
+    } else if('Notification' in window && Notification.permission === 'granted') {
+      S.notifEnabled = true;
+    } else {
+      showToast('الإشعارات غير مدعومة في هذا المتصفح');
+      return;
     }
-  };
-  audio.onended=()=>{
-    updatePlayBtns(g,false);
-    if(card) card.classList.remove('playing');
-    playingGlobal=null;
-    document.getElementById('abar-ico').innerHTML='<path d="M6 4l15 8-15 8z"/>';
-  };
-}
-
-function updatePlayBtns(g, playing) {
-  const btn=document.getElementById('pb-'+g);
-  if(btn) {
-    btn.classList.toggle('playing',playing);
-    btn.innerHTML=playing?
-      '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> إيقاف':
-      '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> استمع';
-  }
-  document.getElementById('abar-ico').innerHTML=playing?
-    '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>':
-    '<path d="M6 4l15 8-15 8z"/>';
-}
-
-function togglePlay() {
-  if(audio.paused) {
-    audio.play();
-    if(playingGlobal) updatePlayBtns(playingGlobal,true);
   } else {
-    audio.pause();
-    if(playingGlobal) updatePlayBtns(playingGlobal,false);
+    S.notifEnabled = false;
   }
+  document.getElementById('tog-notif').classList.toggle('on', S.notifEnabled);
+  document.getElementById('notif-time-wrap').style.display = S.notifEnabled ? 'block' : 'none';
 }
 
-function stopAudio() {
-  audio.pause(); audio.src='';
-  if(playingGlobal) {
-    updatePlayBtns(playingGlobal,false);
-    const c=document.getElementById('ayah-'+playingGlobal);
-    if(c) c.classList.remove('playing');
-    playingGlobal=null;
-  }
-  document.getElementById('abar').classList.remove('show');
-  document.getElementById('abar-prog').style.width='0%';
+function saveWirdSettings() {
+  S.notifTime = document.getElementById('notif-time-input').value;
+  saveS();
+  updateWirdConfigLabel();
+  updateWirdSettingsSub();
+  document.getElementById('wird-modal').classList.remove('open');
+  scheduleNotification();
+  renderHome();
+  showToast('تم حفظ إعدادات الورد ✓');
+}
+
+function updateWirdConfigLabel() {
+  const label = S.wirdType==='ayahs'
+    ? `${toA(S.wirdNum)} آية/يوم`
+    : `${toA(S.wirdNum)} صفحة/يوم`;
+  const el = document.getElementById('wird-config-lbl');
+  if(el) el.textContent = label;
+}
+
+function scheduleNotification() {
+  if(!S.notifEnabled || !('Notification' in window) || Notification.permission !== 'granted') return;
+  // Clear old alarm if any
+  if(window._wirdNotifTimeout) clearTimeout(window._wirdNotifTimeout);
+
+  const [h, m] = S.notifTime.split(':').map(Number);
+  const now = new Date();
+  const next = new Date();
+  next.setHours(h, m, 0, 0);
+  if(next <= now) next.setDate(next.getDate() + 1);
+  const ms = next - now;
+
+  window._wirdNotifTimeout = setTimeout(() => {
+    if(Notification.permission === 'granted') {
+      new Notification('الورد اليومي 📖', {
+        body: `حان وقت ورد اليوم · ${toA(S.wirdNum)} ${S.wirdType==='ayahs'?'آية':'صفحة'}`,
+        icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><polygon points="20,2 24,15 38,15 27,23 31,37 20,29 9,37 13,23 2,15 16,15" fill="none" stroke="%232563EB" stroke-width="2"/><circle cx="20" cy="20" r="4" fill="%232563EB" opacity=".7"/></svg>',
+        tag: 'wird-daily'
+      });
+      // Schedule next day
+      scheduleNotification();
+    }
+  }, ms);
 }
 
 /* ═══════════════════════════════════════════
@@ -1410,8 +1589,17 @@ function renderProgress() {
   }
   days30.forEach(d=>{
     const el=document.createElement('div');
-    const read=S.readingDates.includes(d.date);
-    el.className='cday '+(d.isToday?'today ':'')+(read?'read':'none');
+    const entry = S.dailyWird[d.date];
+    const fullDone = entry && entry.done;
+    const partialDone = entry && !entry.done && entry.partial > 0;
+    const read = S.readingDates.includes(d.date);
+    let cls = 'cday ';
+    if(d.isToday) cls += 'today ';
+    if(fullDone) cls += 'read';
+    else if(partialDone) cls += 'partial';
+    else if(read) cls += 'partial';
+    else cls += 'none';
+    el.className = cls;
     el.textContent=toA(d.day);
     fc.appendChild(el);
   });
@@ -1437,8 +1625,17 @@ function renderSettings() {
   [7,15,30,60].forEach(p=>{
     document.getElementById('pl-'+p).classList.toggle('on',S.plan===p);
   });
-  document.getElementById('rec-sel').value=S.reciter;
   document.getElementById('start-date-lbl').textContent='البداية: '+S.startDate;
+  updateWirdConfigLabel();
+  updateWirdSettingsSub();
+}
+
+function updateWirdSettingsSub() {
+  const el = document.getElementById('wird-settings-sub');
+  if(!el) return;
+  const count = `${toA(S.wirdNum)} ${S.wirdType==='ayahs'?'آية':'صفحة'}/يوم`;
+  const notif = S.notifEnabled ? `· تذكير ${S.notifTime}` : '· بدون تذكير';
+  el.textContent = count + ' ' + notif;
 }
 
 function toggleDark() {
@@ -1468,12 +1665,6 @@ function setPlan(p) {
   showToast(`تم ضبط الخطة: ${toA(p)} يوماً`);
 }
 
-function setReciter(v) {
-  S.reciter=v;
-  saveS();
-  showToast('تم تغيير القارئ');
-}
-
 function resetStartDate() {
   S.startDate=today();
   document.getElementById('start-date-lbl').textContent='البداية: '+S.startDate;
@@ -1494,6 +1685,7 @@ function resetProgress() {
     S.completedJuz=[];
     S.completedAyahs=[];
     S.readingDates=[];
+    S.dailyWird={};
     S.currentStreak=0;
     S.longestStreak=0;
     S.searchCount=0;
@@ -1541,6 +1733,9 @@ async function init() {
 
   initSelectors();
   renderHome();
+  updateWirdConfigLabel();
+  updateWirdSettingsSub();
+  if(S.notifEnabled) scheduleNotification();
 
   // Show app, hide splash
   document.getElementById('app').style.display='flex';
