@@ -140,12 +140,12 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .votd-ref{font-size:.78rem;color:var(--tx2)}
 
 /* STREAK CARD */
-.streak-card{background:var(--surface);border-radius:var(--r28);padding:20px;border:1px solid var(--border-soft);box-shadow:var(--sh1);margin-bottom:14px}
+.streak-card{background:var(--surface);border-radius:var(--r28);padding:16px;border:1px solid var(--border-soft);box-shadow:var(--sh1);margin-bottom:14px}
 .sec-ttl{font-size:.92rem;font-weight:700;color:var(--tx);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
 .sec-badge{font-size:.72rem;padding:3px 10px;border-radius:999px;background:var(--b50);color:var(--b600);font-weight:700}
 .dark .sec-badge{background:rgba(59,130,246,.15);color:var(--b300)}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
-.cday{aspect-ratio:1;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:600;cursor:default;transition:all var(--tr)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:clamp(2px,1vw,6px);width:100%}
+.cday{aspect-ratio:1;border-radius:clamp(4px,1.5vw,8px);display:flex;align-items:center;justify-content:center;font-size:clamp(.5rem,.9vw + .3rem,.72rem);font-weight:600;cursor:default;transition:all var(--tr);min-width:0;overflow:hidden}
 .cday.read{background:var(--b500);color:white}
 .cday.partial{background:var(--b200);color:var(--b700)}
 .cday.today{outline:2px solid var(--g500);outline-offset:1px}
@@ -337,7 +337,8 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .wird-stepper{display:flex;align-items:center;gap:0;border:2px solid var(--border);border-radius:var(--r12);overflow:hidden;background:var(--surface)}
 .ws-btn{width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:700;color:var(--b600);background:var(--surface-tinted);cursor:pointer;border:none;transition:background var(--tr)}
 .ws-btn:active{background:var(--b50)}
-.ws-val{min-width:60px;text-align:center;font-size:1.2rem;font-weight:800;color:var(--tx);font-family:var(--fa);padding:0 8px}
+.ws-input{width:70px;height:44px;text-align:center;font-size:1.15rem;font-weight:800;color:var(--tx);font-family:var(--fu);border:none;background:var(--surface);outline:none;padding:0 4px;appearance:textfield;-moz-appearance:textfield}
+.ws-input::-webkit-outer-spin-button,.ws-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .notif-row{display:flex;align-items:center;gap:10px}
 .notif-time-input{flex:1;padding:10px 14px;border-radius:var(--r12);border:2px solid var(--border);background:var(--surface-tinted);color:var(--tx);font-size:1rem;font-family:var(--fu);outline:none;transition:border-color var(--tr);direction:ltr;text-align:center}
 .notif-time-input:focus{border-color:var(--b400)}
@@ -348,6 +349,25 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .wird-badge{display:inline-flex;align-items:center;gap:5px;font-size:.72rem;color:var(--b600);font-weight:700;background:var(--b50);padding:3px 10px;border-radius:999px;cursor:pointer;border:1.5px solid var(--b200);transition:all var(--tr)}
 .wird-badge:active{background:var(--b100)}
 .dark .wird-badge{background:rgba(59,130,246,.12);border-color:rgba(59,130,246,.25);color:var(--b300)}
+
+/* GOAL CARD */
+.goal-card{background:var(--surface-tinted);border:1.5px solid var(--border);border-radius:var(--r12);padding:14px;display:flex;flex-direction:column;gap:10px}
+.goal-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.goal-lbl{font-size:.82rem;color:var(--tx);font-weight:600;flex-shrink:0}
+.goal-input-wrap{display:flex;align-items:center;gap:6px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r8);padding:6px 10px;transition:border-color var(--tr)}
+.goal-input-wrap:focus-within{border-color:var(--b400)}
+.goal-inp{width:70px;border:none;background:transparent;color:var(--tx);font-size:1rem;font-weight:800;font-family:var(--fu);text-align:center;outline:none;appearance:textfield;-moz-appearance:textfield;direction:ltr}
+.goal-inp::-webkit-outer-spin-button,.goal-inp::-webkit-inner-spin-button{-webkit-appearance:none}
+.goal-unit{font-size:.78rem;color:var(--tx2);font-weight:600;white-space:nowrap}
+.goal-result{display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--b50),var(--b100));border:1.5px solid var(--b200);border-radius:var(--r12);padding:12px;margin-top:2px;animation:fin .3s ease}
+.dark .goal-result{background:rgba(59,130,246,.08);border-color:rgba(59,130,246,.2)}
+.goal-res-ico{font-size:1.4rem;flex-shrink:0}
+.goal-res-body{flex:1}
+.goal-res-main{font-size:.92rem;font-weight:800;color:var(--b700);}
+.dark .goal-res-main{color:var(--b300)}
+.goal-res-sub{font-size:.72rem;color:var(--tx2);margin-top:2px}
+.goal-apply-btn{padding:7px 12px;background:var(--b600);color:white;border:none;border-radius:var(--r8);font-size:.76rem;font-weight:800;font-family:var(--fu);cursor:pointer;white-space:nowrap;transition:all var(--tr)}
+.goal-apply-btn:active{background:var(--b700);transform:scale(.97)}
 
 /* WIRD DONE STATE */
 .wird.done-full{background:linear-gradient(135deg,#059669 0%,#10B981 55%,#34D399 100%);box-shadow:0 8px 32px rgba(5,150,105,.35)}
@@ -556,7 +576,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
       <div class="card">
         <div class="sec-ttl">سجل ٣٠ يوماً<span class="sec-badge" id="prg-streak-badge">٠</span></div>
-        <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:5px;text-align:center;font-size:.58rem;color:var(--tx2);font-weight:700">
+        <div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:clamp(2px,1vw,6px);margin-bottom:5px;text-align:center;font-size:clamp(.48rem,.8vw + .25rem,.62rem);color:var(--tx2);font-weight:700;width:100%">
           <span>أح</span><span>إث</span><span>ث</span><span>أر</span><span>خ</span><span>ج</span><span>س</span>
         </div>
         <div class="cal-grid" id="full-cal"></div>
@@ -587,16 +607,6 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 
     <!-- SETTINGS -->
     <section id="v-settings" class="view">
-      <div class="set-sec">
-        <div class="set-sec-ttl">خطة القراءة</div>
-        <div class="plan-grid" id="plan-grid">
-          <div class="plan-opt" id="pl-7" onclick="setPlan(7)"><span class="plan-days">٧</span><span class="plan-lbl">أيام (منزل)</span></div>
-          <div class="plan-opt" id="pl-15" onclick="setPlan(15)"><span class="plan-days">١٥</span><span class="plan-lbl">يوماً</span></div>
-          <div class="plan-opt on" id="pl-30" onclick="setPlan(30)"><span class="plan-days">٣٠</span><span class="plan-lbl">يوماً (جزء)</span></div>
-          <div class="plan-opt" id="pl-60" onclick="setPlan(60)"><span class="plan-days">٦٠</span><span class="plan-lbl">يوماً (حزب)</span></div>
-        </div>
-      </div>
-
       <div class="set-sec">
         <div class="set-sec-ttl">العرض</div>
         <div class="set-item" onclick="toggleDark()">
@@ -647,6 +657,13 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
           <div class="set-icon">ℹ️</div>
           <div class="set-cnt"><div class="set-ttl">الورد اليومي</div><div class="set-sub">الإصدار ٢.٠ • القرآن من alquran.cloud</div></div>
         </div>
+        <div class="set-item" style="cursor:default">
+          <div class="set-icon">🤲</div>
+          <div class="set-cnt">
+            <div class="set-ttl">صدقة جارية</div>
+            <div class="set-sub" style="line-height:1.7">لنا ولأهلنا أحياءً وأمواتاً<br>من طلبة كلية الطب<br>جامعة الإسكندرية الأهلية · دفعة ٢٠٢٩</div>
+          </div>
+        </div>
       </div>
       <div style="height:20px"></div>
     </section>
@@ -695,12 +712,13 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
     <div class="wird-set-group">
       <div class="wird-set-lbl" id="wird-num-lbl">📖 عدد الآيات يومياً</div>
       <div class="wird-num-row">
-        <div class="wird-stepper">
-          <button class="ws-btn" onclick="changeWirdNum(-1)">−</button>
-          <span class="ws-val" id="ws-display">٢٠</span>
-          <button class="ws-btn" onclick="changeWirdNum(1)">+</button>
+          <div class="wird-stepper">
+            <button class="ws-btn" onclick="changeWirdNum(-1)">−</button>
+            <input class="ws-input" id="ws-display" type="number" min="1" max="300" value="20"
+              oninput="onWirdNumInput(this)" onblur="onWirdNumBlur(this)" onclick="this.select()">
+            <button class="ws-btn" onclick="changeWirdNum(1)">+</button>
+          </div>
         </div>
-      </div>
     </div>
 
     <div class="wird-set-group">
@@ -711,6 +729,34 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       <div id="notif-time-wrap" style="display:none;margin-top:10px">
         <div class="wird-set-lbl">🕐 وقت التذكير</div>
         <input type="time" class="notif-time-input" id="notif-time-input" value="08:00">
+      </div>
+    </div>
+
+    <div class="wird-set-group">
+      <div class="wird-set-lbl">🎯 هدف الختمة</div>
+      <div class="goal-card">
+        <div class="goal-row">
+          <label class="goal-lbl">أريد أختم في</label>
+          <div class="goal-input-wrap">
+            <input type="number" class="goal-inp" id="goal-days-inp" min="1" max="3650" placeholder="٣٠" oninput="calcGoalPages()">
+            <span class="goal-unit">يوم</span>
+          </div>
+        </div>
+        <div class="goal-row">
+          <label class="goal-lbl">وقد قرأت</label>
+          <div class="goal-input-wrap">
+            <input type="number" class="goal-inp" id="goal-pages-done-inp" min="0" max="604" placeholder="٠" oninput="calcGoalPages()">
+            <span class="goal-unit">صفحة</span>
+          </div>
+        </div>
+        <div class="goal-result" id="goal-result" style="display:none">
+          <div class="goal-res-ico">📊</div>
+          <div class="goal-res-body">
+            <div class="goal-res-main" id="goal-res-main">—</div>
+            <div class="goal-res-sub" id="goal-res-sub">—</div>
+          </div>
+          <button class="goal-apply-btn" id="goal-apply-btn" onclick="applyGoalToWird()">تطبيق</button>
+        </div>
       </div>
     </div>
 
@@ -879,7 +925,11 @@ function getWirdProgress() {
   const entry = getTodayWirdEntry();
   if(entry.done) return 100;
   if(!S.wirdNum) return 0;
-  return Math.min(100, Math.round((entry.partial / S.wirdNum) * 100));
+  // When tracking by ayahs, prefer the auto-counted todayAyahs over manual partial
+  const counted = S.wirdType === 'ayahs'
+    ? Math.max(entry.partial || 0, entry.todayAyahs || 0)
+    : (entry.partial || 0);
+  return Math.min(100, Math.round((counted / S.wirdNum) * 100));
 }
 
 function getOverallProgress() {
@@ -925,7 +975,9 @@ function renderHome() {
   const unit = S.wirdType==='ayahs' ? 'آية' : 'صفحة';
   document.getElementById('wird-ttl').textContent = `${toA(S.wirdNum)} ${unit}`;
   const entry = getTodayWirdEntry();
-  const partial = entry.partial || 0;
+  const partial = S.wirdType === 'ayahs'
+    ? Math.max(entry.partial || 0, entry.todayAyahs || 0)
+    : (entry.partial || 0);
   const done = entry.done;
   document.getElementById('wird-sub').textContent = done
     ? 'أحسنت! أتممت ورد اليوم 🌟'
@@ -1267,20 +1319,50 @@ async function loadTafsir(globalN, surahN, ayahN) {
 }
 
 function markAyahDone(g) {
-  const done=S.completedAyahs.includes(g);
-  if(done) {
-    S.completedAyahs=S.completedAyahs.filter(x=>x!==g);
+  const wasDone = S.completedAyahs.includes(g);
+  if(wasDone) {
+    S.completedAyahs = S.completedAyahs.filter(x => x !== g);
   } else {
     S.completedAyahs.push(g);
   }
-  const card=document.getElementById('ayah-'+g);
-  const btn=document.getElementById('dn-'+g);
-  if(card) card.classList.toggle('done',!done);
-  if(btn){
-    btn.classList.toggle('on',!done);
-    btn.innerHTML=`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>${!done?'تمت':'قرأت'}`;
+  const card = document.getElementById('ayah-'+g);
+  const btn  = document.getElementById('dn-'+g);
+  if(card) card.classList.toggle('done', !wasDone);
+  if(btn) {
+    btn.classList.toggle('on', !wasDone);
+    btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>${!wasDone?'تمت':'قرأت'}`;
   }
   markReadToday();
+
+  // ── Update daily wird progress from ayah count (only when wirdType=ayahs) ──
+  if(S.wirdType === 'ayahs') {
+    const entry = getTodayWirdEntry();
+    // Count how many ayahs the user has marked done today from the current loaded set.
+    // We track completedAyahs globally, so count all completed ayahs marked today.
+    // Since completedAyahs persists across sessions (it's all-time), we use it as the
+    // running total — each "قرأت" tick = one ayah credited toward today's wird.
+    // We store the count at the last session start to compute a delta, OR we simply
+    // set partial = total completed since last reset capped at wirdNum.
+    // Simpler and reliable: use a dedicated today-ayah count in dailyWird.
+    if(!entry.todayAyahs) entry.todayAyahs = 0;
+    if(!wasDone) {
+      entry.todayAyahs++;
+    } else {
+      entry.todayAyahs = Math.max(0, entry.todayAyahs - 1);
+    }
+    // Update partial (but don't override a manual full-done)
+    if(!entry.done) {
+      entry.partial = Math.min(entry.todayAyahs, S.wirdNum);
+      if(entry.todayAyahs >= S.wirdNum && !entry.done) {
+        entry.done = true;
+        entry.partial = S.wirdNum;
+        showToast('ما شاء الله! أتممت ورد اليوم 🌟');
+        // Re-render home card if visible
+        if(S.currentView === 'home') renderHome();
+      }
+    }
+  }
+
   saveS();
 }
 
@@ -1324,11 +1406,17 @@ function openWirdModal() {
   // Sync modal UI with current state
   document.getElementById('wt-ayahs').classList.toggle('on', S.wirdType==='ayahs');
   document.getElementById('wt-pages').classList.toggle('on', S.wirdType==='pages');
-  document.getElementById('ws-display').textContent = toA(S.wirdNum);
+  document.getElementById('ws-display').value = S.wirdNum;
+  document.getElementById('ws-display').max = S.wirdType==='pages' ? 30 : 300;
   document.getElementById('wird-num-lbl').textContent = S.wirdType==='ayahs' ? '📖 عدد الآيات يومياً' : '📄 عدد الصفحات يومياً';
   document.getElementById('tog-notif').classList.toggle('on', S.notifEnabled);
   document.getElementById('notif-time-input').value = S.notifTime;
   document.getElementById('notif-time-wrap').style.display = S.notifEnabled ? 'block' : 'none';
+  // Reset goal calculator
+  document.getElementById('goal-days-inp').value = '';
+  document.getElementById('goal-pages-done-inp').value = '';
+  document.getElementById('goal-result').style.display = 'none';
+  window._goalComputed = null;
   document.getElementById('wird-modal').classList.add('open');
 }
 
@@ -1343,17 +1431,39 @@ function setWirdType(t) {
   document.getElementById('wt-ayahs').classList.toggle('on', t==='ayahs');
   document.getElementById('wt-pages').classList.toggle('on', t==='pages');
   document.getElementById('wird-num-lbl').textContent = t==='ayahs' ? '📖 عدد الآيات يومياً' : '📄 عدد الصفحات يومياً';
-  // Adjust sensible default
-  if(t==='pages' && S.wirdNum > 30) { S.wirdNum=5; document.getElementById('ws-display').textContent=toA(5); }
-  if(t==='ayahs' && S.wirdNum < 5) { S.wirdNum=20; document.getElementById('ws-display').textContent=toA(20); }
+  const inp = document.getElementById('ws-display');
+  const max = t==='pages' ? 30 : 300;
+  inp.max = max;
+  // Adjust to sensible default if out of range
+  if(t==='pages' && S.wirdNum > 30) { S.wirdNum=5; inp.value=5; }
+  if(t==='ayahs' && S.wirdNum < 5) { S.wirdNum=20; inp.value=20; }
 }
 
 function changeWirdNum(delta) {
-  const min = S.wirdType==='pages' ? 1 : 1;
+  const inp = document.getElementById('ws-display');
+  const min = 1;
   const max = S.wirdType==='pages' ? 30 : 300;
   const step = S.wirdType==='pages' ? 1 : 5;
-  S.wirdNum = Math.max(min, Math.min(max, S.wirdNum + delta * step));
-  document.getElementById('ws-display').textContent = toA(S.wirdNum);
+  const current = parseInt(inp.value) || S.wirdNum;
+  S.wirdNum = Math.max(min, Math.min(max, current + delta * step));
+  inp.value = S.wirdNum;
+}
+
+function onWirdNumInput(inp) {
+  // Live update S.wirdNum as user types
+  const v = parseInt(inp.value);
+  if(!isNaN(v) && v >= 1) S.wirdNum = v;
+}
+
+function onWirdNumBlur(inp) {
+  // Clamp and clean on blur
+  const min = 1;
+  const max = S.wirdType==='pages' ? 30 : 300;
+  let v = parseInt(inp.value);
+  if(isNaN(v) || v < min) v = min;
+  if(v > max) v = max;
+  S.wirdNum = v;
+  inp.value = v;
 }
 
 function toggleNotif() {
@@ -1384,6 +1494,8 @@ function toggleNotif() {
 }
 
 function saveWirdSettings() {
+  // Flush the number input in case user typed without blurring
+  onWirdNumBlur(document.getElementById('ws-display'));
   S.notifTime = document.getElementById('notif-time-input').value;
   saveS();
   updateWirdConfigLabel();
@@ -1622,9 +1734,6 @@ function renderProgress() {
 function renderSettings() {
   document.getElementById('tog-dark').classList.toggle('on',S.darkMode);
   document.getElementById('tog-tafsir').classList.toggle('on',S.showTafsir);
-  [7,15,30,60].forEach(p=>{
-    document.getElementById('pl-'+p).classList.toggle('on',S.plan===p);
-  });
   document.getElementById('start-date-lbl').textContent='البداية: '+S.startDate;
   updateWirdConfigLabel();
   updateWirdSettingsSub();
@@ -1660,9 +1769,64 @@ function toggleTafsir() {
 
 function setPlan(p) {
   S.plan=p;
-  [7,15,30,60].forEach(x=>document.getElementById('pl-'+x).classList.toggle('on',x===p));
+  [7,15,30,60].forEach(x=>document.getElementById('pl-'+x)&&document.getElementById('pl-'+x).classList.toggle('on',x===p));
   saveS();
   showToast(`تم ضبط الخطة: ${toA(p)} يوماً`);
+}
+
+/* ═══════════════════════════════════════════
+   READING GOAL CALCULATOR
+═══════════════════════════════════════════ */
+// Quran: 604 pages total, ~6236 ayahs total
+const QURAN_PAGES = 604;
+const QURAN_AYAHS = 6236;
+
+function calcGoalPages() {
+  const daysInp = document.getElementById('goal-days-inp');
+  const doneInp = document.getElementById('goal-pages-done-inp');
+  const resultEl = document.getElementById('goal-result');
+  const mainEl = document.getElementById('goal-res-main');
+  const subEl = document.getElementById('goal-res-sub');
+
+  const days = parseInt(daysInp.value) || 0;
+  const pagesDone = Math.min(parseInt(doneInp.value) || 0, QURAN_PAGES);
+
+  if(days < 1) { resultEl.style.display='none'; return; }
+
+  const pagesLeft = Math.max(QURAN_PAGES - pagesDone, 0);
+  const pagesPerDay = Math.ceil(pagesLeft / days);
+  const ayahsPerDay = Math.ceil((pagesLeft / QURAN_PAGES) * QURAN_AYAHS / days);
+
+  resultEl.style.display='flex';
+
+  if(pagesDone >= QURAN_PAGES) {
+    mainEl.textContent = '🎉 أتممت القرآن الكريم!';
+    subEl.textContent = 'ما شاء الله، جزاك الله خيراً';
+    document.getElementById('goal-apply-btn').style.display='none';
+    return;
+  }
+
+  document.getElementById('goal-apply-btn').style.display='';
+  mainEl.textContent = `${toA(pagesPerDay)} صفحة/يوم`;
+  subEl.textContent = `متبقي ${toA(pagesLeft)} صفحة · ${toA(ayahsPerDay)} آية يومياً تقريباً`;
+
+  // Store computed values for apply
+  window._goalComputed = { pagesPerDay, ayahsPerDay };
+}
+
+function applyGoalToWird() {
+  if(!window._goalComputed) return;
+  const { pagesPerDay, ayahsPerDay } = window._goalComputed;
+  // Apply to wird settings: use pages mode if pages, else ayahs
+  if(S.wirdType === 'pages') {
+    S.wirdNum = pagesPerDay;
+    document.getElementById('ws-display').value = pagesPerDay;
+  } else {
+    S.wirdNum = ayahsPerDay;
+    document.getElementById('ws-display').value = ayahsPerDay;
+  }
+  updateWirdConfigLabel();
+  showToast('✅ تم تطبيق الهدف على وردك اليومي');
 }
 
 function resetStartDate() {
