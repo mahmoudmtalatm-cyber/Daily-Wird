@@ -370,11 +370,6 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .ws-btn:active{background:var(--b50)}
 .ws-input{width:70px;height:44px;text-align:center;font-size:1.15rem;font-weight:800;color:var(--tx);font-family:var(--fu);border:none;background:var(--surface);outline:none;padding:0 4px;appearance:textfield;-moz-appearance:textfield}
 .ws-input::-webkit-outer-spin-button,.ws-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-.notif-row{display:flex;align-items:center;gap:10px}
-.notif-time-input{flex:1;padding:10px 14px;border-radius:var(--r12);border:2px solid var(--border);background:var(--surface-tinted);color:var(--tx);font-size:1rem;font-family:var(--fu);outline:none;transition:border-color var(--tr);direction:ltr;text-align:center}
-.notif-time-input:focus{border-color:var(--b400)}
-.notif-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0}
-.notif-lbl{font-size:.88rem;font-weight:600;color:var(--tx)}
 .modal-save{width:100%;padding:14px;background:linear-gradient(135deg,var(--b600),var(--b500));color:white;border-radius:var(--r20);font-size:1rem;font-weight:800;font-family:var(--fu);cursor:pointer;border:none;margin-top:4px;transition:all var(--tr);box-shadow:0 4px 16px rgba(37,99,235,.3)}
 .modal-save:active{transform:scale(.98);opacity:.9}
 .wird-badge{display:inline-flex;align-items:center;gap:5px;font-size:.72rem;color:var(--b600);font-weight:700;background:var(--b50);padding:3px 10px;border-radius:999px;cursor:pointer;border:1.5px solid var(--b200);transition:all var(--tr)}
@@ -807,17 +802,6 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
     </div>
 
     <div class="wird-set-group">
-      <div class="notif-toggle-row">
-        <span class="notif-lbl">🔔 تذكير يومي بالورد</span>
-        <div class="toggle" id="tog-notif" onclick="toggleNotif()"></div>
-      </div>
-      <div id="notif-time-wrap" style="display:none;margin-top:10px">
-        <div class="wird-set-lbl">🕐 وقت التذكير</div>
-        <input type="time" class="notif-time-input" id="notif-time-input" value="08:00">
-      </div>
-    </div>
-
-    <div class="wird-set-group">
       <div class="wird-set-lbl">🎯 هدف الختمة</div>
       <div class="goal-card">
         <div class="goal-row">
@@ -989,8 +973,6 @@ let S = {
   // Wird custom settings
   wirdType:'ayahs',   // 'ayahs' | 'pages'
   wirdNum:20,         // daily target count
-  notifEnabled:false,
-  notifTime:'08:00',
   // Daily wird tracking: { "YYYY-MM-DD": { done: bool, partial: number } }
   dailyWird:{},
   readingPos: null,       // global ayah number of reading position marker
@@ -2210,9 +2192,6 @@ function openWirdModal() {
   document.getElementById('ws-display').value = S.wirdNum;
   document.getElementById('ws-display').max = '';
   document.getElementById('wird-num-lbl').textContent = S.wirdType==='ayahs' ? '📖 عدد الآيات يومياً' : '📄 عدد الصفحات يومياً';
-  document.getElementById('tog-notif').classList.toggle('on', S.notifEnabled);
-  document.getElementById('notif-time-input').value = S.notifTime;
-  document.getElementById('notif-time-wrap').style.display = S.notifEnabled ? 'block' : 'none';
   // Reset goal calculator
   document.getElementById('goal-days-inp').value = '';
   document.getElementById('goal-pages-done-inp').value = '';
@@ -2262,42 +2241,13 @@ function onWirdNumBlur(inp) {
   inp.value = v;
 }
 
-function toggleNotif() {
-  if(!S.notifEnabled) {
-    // Request permission first
-    if('Notification' in window && Notification.permission === 'default') {
-      Notification.requestPermission().then(perm => {
-        if(perm === 'granted') {
-          S.notifEnabled = true;
-          document.getElementById('tog-notif').classList.add('on');
-          document.getElementById('notif-time-wrap').style.display = 'block';
-        } else {
-          showToast('لم يتم السماح بالإشعارات');
-        }
-      });
-      return;
-    } else if('Notification' in window && Notification.permission === 'granted') {
-      S.notifEnabled = true;
-    } else {
-      showToast('الإشعارات غير مدعومة في هذا المتصفح');
-      return;
-    }
-  } else {
-    S.notifEnabled = false;
-  }
-  document.getElementById('tog-notif').classList.toggle('on', S.notifEnabled);
-  document.getElementById('notif-time-wrap').style.display = S.notifEnabled ? 'block' : 'none';
-}
-
 function saveWirdSettings() {
   // Flush the number input in case user typed without blurring
   onWirdNumBlur(document.getElementById('ws-display'));
-  S.notifTime = document.getElementById('notif-time-input').value;
   saveS();
   updateWirdConfigLabel();
   updateWirdSettingsSub();
   document.getElementById('wird-modal').classList.remove('open');
-  scheduleNotification();
   renderHome();
   showToast('تم حفظ إعدادات الورد ✓');
 }
@@ -2310,30 +2260,6 @@ function updateWirdConfigLabel() {
   if(el) el.textContent = label;
 }
 
-function scheduleNotification() {
-  if(!S.notifEnabled || !('Notification' in window) || Notification.permission !== 'granted') return;
-  // Clear old alarm if any
-  if(window._wirdNotifTimeout) clearTimeout(window._wirdNotifTimeout);
-
-  const [h, m] = S.notifTime.split(':').map(Number);
-  const now = new Date();
-  const next = new Date();
-  next.setHours(h, m, 0, 0);
-  if(next <= now) next.setDate(next.getDate() + 1);
-  const ms = next - now;
-
-  window._wirdNotifTimeout = setTimeout(() => {
-    if(Notification.permission === 'granted') {
-      new Notification('الورد اليومي 📖', {
-        body: `حان وقت ورد اليوم · ${toA(S.wirdNum)} ${S.wirdType==='ayahs'?'آية':'صفحة'}`,
-        icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><polygon points="20,2 24,15 38,15 27,23 31,37 20,29 9,37 13,23 2,15 16,15" fill="none" stroke="%232563EB" stroke-width="2"/><circle cx="20" cy="20" r="4" fill="%232563EB" opacity=".7"/></svg>',
-        tag: 'wird-daily'
-      });
-      // Schedule next day
-      scheduleNotification();
-    }
-  }, ms);
-}
 
 /* ═══════════════════════════════════════════
    BOOKMARKS
@@ -2543,8 +2469,7 @@ function updateWirdSettingsSub() {
   const el = document.getElementById('wird-settings-sub');
   if(!el) return;
   const count = `${toA(S.wirdNum)} ${S.wirdType==='ayahs'?'آية':'صفحة'}/يوم`;
-  const notif = S.notifEnabled ? `· تذكير ${S.notifTime}` : '· بدون تذكير';
-  el.textContent = count + ' ' + notif;
+  el.textContent = count;
 }
 
 function toggleDark() {
@@ -2683,8 +2608,6 @@ function resetAll() {
     rdrMode:'juz', currentRdrNum:1,
     wirdType:'ayahs',
     wirdNum:20,
-    notifEnabled:false,
-    notifTime:'08:00',
     dailyWird:{},
     readingPos: null,
     completedPages: [],
@@ -2745,8 +2668,6 @@ async function init() {
   renderHome();
   updateWirdConfigLabel();
   updateWirdSettingsSub();
-  if(S.notifEnabled) scheduleNotification();
-
   // Show app, hide splash
   document.getElementById('app').style.display='flex';
   setTimeout(()=>{
