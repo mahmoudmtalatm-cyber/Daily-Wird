@@ -2046,6 +2046,15 @@ function renderAyahs(ayahs, mode, num) {
   });
 
   html += '</div>';
+  // Bottom nav — mirrors the top nav so user doesn't have to scroll back up
+  html += `<div class="rdr-nav" style="margin-top:10px">
+    <button class="rnav-btn" id="nav-prev-bot" onclick="navigateContent(-1)">&#8249; السابق</button>
+    <button class="rnav-btn" style="flex:.6;border-color:var(--b300);color:var(--b600)" onclick="openRangeModal()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      نطاق
+    </button>
+    <button class="rnav-btn" id="nav-next-bot" onclick="navigateContent(1)">التالي &#8250;</button>
+  </div>`;
   rc.innerHTML = html;
 
   if(S.showTafsir) {
@@ -2410,11 +2419,19 @@ async function checkPageCompletion() {
 }
 
 function updateNavBtns(mode, num) {
+  const max=mode==='juz'?30:mode==='surah'?114:604;
+  const atStart = num<=1;
+  const atEnd   = num>=max;
+  // Top nav
   const prev=document.getElementById('nav-prev');
   const next=document.getElementById('nav-next');
-  const max=mode==='juz'?30:mode==='surah'?114:604;
-  prev.disabled=num<=1;
-  next.disabled=num>=max;
+  if(prev) prev.disabled=atStart;
+  if(next) next.disabled=atEnd;
+  // Bottom nav (inside rdr-content, rendered per load)
+  const prevBot=document.getElementById('nav-prev-bot');
+  const nextBot=document.getElementById('nav-next-bot');
+  if(prevBot) prevBot.disabled=atStart;
+  if(nextBot) nextBot.disabled=atEnd;
 }
 
 function navigateContent(dir) {
@@ -2945,6 +2962,10 @@ function onAyahCardClick(globalNum) {
       _mselEnd = meta;
     }
     document.getElementById('range-from-sel-btn').style.display = 'flex';
+    // Auto-open the play modal so user doesn't have to scroll back up
+    _refreshMselHighlights();
+    setTimeout(() => openRangeModalFromSel(), 320);
+    return;
   }
   _refreshMselHighlights();
 }
