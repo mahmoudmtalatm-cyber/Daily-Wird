@@ -219,7 +219,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 /* RECITER PICKER MODAL */
 #reciter-modal{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s ease}
 #reciter-modal.open{opacity:1;pointer-events:all}
-.reciter-sheet{background:var(--surface);border-radius:var(--r28) var(--r28) 0 0;padding:20px 16px 32px;width:100%;max-width:600px;transform:translateY(100%);transition:transform .3s cubic-bezier(.34,1.2,.64,1)}
+.reciter-sheet{background:var(--surface);border-radius:var(--r28) var(--r28) 0 0;padding:20px 16px 32px;width:100%;max-width:600px;transform:translateY(100%);transition:transform .3s cubic-bezier(.34,1.2,.64,1);max-height:88vh;overflow-y:auto}
 @media(min-width:600px){.reciter-sheet{max-width:720px}}
 #reciter-modal.open .reciter-sheet{transform:translateY(0)}
 .reciter-sheet-ttl{font-size:1rem;font-weight:800;color:var(--tx);text-align:center;margin-bottom:4px}
@@ -1316,11 +1316,13 @@ let _rdrAudioGlobal = null;     // global ayah number currently loaded
 let _pendingAyahAfterReciter = null; // ayah to play once reciter is picked
 
 const RECITERS = {
-  'ar.alafasy':      { label: 'العفاسي',     id: 'ar.alafasy' },
-  'ar.abdurrahmaansudais': { label: 'السديس', id: 'ar.abdurrahmaansudais' },
-  'ar.husary':       { label: 'الحصري',      id: 'ar.husary' },
-  'ar.muhammadayyoub': { label: 'أيوب',      id: 'ar.muhammadayyoub' },
-  'ar.mahermuaiqly': { label: 'المعيقلي',    id: 'ar.mahermuaiqly' },
+  'ar.alafasy':               { label: 'العفاسي' },
+  'ar.husary':                { label: 'الحصري' },
+  'ar.muhammadayyoub':        { label: 'أيوب' },
+  'ar.mahermuaiqly':          { label: 'المعيقلي' },
+  'ar.minshawi':              { label: 'المنشاوي' },
+  'ar.shaatree':              { label: 'الشاطري' },
+  'ar.ahmedajamy':            { label: 'أحمد العجمي' },
 };
 
 function getAudioUrl(globalAyah) {
@@ -1891,24 +1893,25 @@ function _setAyahAudioIcon(globalAyah, playing) {
 }
 
 function openReciterPicker() {
-  // Render options
   const list = document.getElementById('reciter-list');
   list.innerHTML = '';
   const RECITER_META = {
-    'ar.alafasy':           { name: 'مشاري العفاسي',        sub: 'كويتي · رواية حفص' },
-    'ar.abdurrahmaansudais':{ name: 'عبد الرحمن السديس',    sub: 'إمام المسجد الحرام' },
-    'ar.husary':            { name: 'محمود خليل الحصري',    sub: 'مصري · رواية حفص' },
-    'ar.muhammadayyoub':    { name: 'محمد أيوب',            sub: 'سعودي · رواية حفص' },
-    'ar.mahermuaiqly':      { name: 'ماهر المعيقلي',        sub: 'إمام المسجد الحرام' },
+    'ar.alafasy':            { name: 'مشاري راشد العفاسي',     sub: 'الكويت · رواية حفص',          icon: '🎙️' },
+    'ar.mahermuaiqly':       { name: 'ماهر المعيقلي',          sub: 'إمام المسجد الحرام · مكة',     icon: '🕌' },
+    'ar.husary':             { name: 'محمود خليل الحصري',      sub: 'مصر · رواية حفص',             icon: '📖' },
+    'ar.minshawi':           { name: 'محمد صديق المنشاوي',     sub: 'مصر · رواية حفص',             icon: '📖' },
+    'ar.muhammadayyoub':     { name: 'محمد أيوب',              sub: 'المدينة المنورة · رواية حفص',  icon: '⭐' },
+    'ar.shaatree':           { name: 'أبو بكر الشاطري',        sub: 'السعودية · رواية حفص',         icon: '🎙️' },
+    'ar.ahmedajamy':         { name: 'أحمد العجمي',            sub: 'الكويت · رواية حفص',           icon: '🌙' },
   };
-  const ICONS = ['🎙️','🕌','📖','🎶','🌙'];
-  Object.entries(RECITER_META).forEach(([id, meta], i) => {
-    const sel = (S.reciter || 'ar.alafasy') === id;
+  const cur = S.reciter || 'ar.alafasy';
+  Object.entries(RECITER_META).forEach(([id, meta]) => {
+    const sel = cur === id;
     const el = document.createElement('div');
     el.className = 'reciter-opt' + (sel ? ' selected' : '');
     el.innerHTML = `
-      <div class="reciter-opt-icon">${ICONS[i]}</div>
-      <div>
+      <div class="reciter-opt-icon">${meta.icon}</div>
+      <div style="flex:1;min-width:0">
         <div class="reciter-opt-name">${meta.name}</div>
         <div class="reciter-opt-sub">${meta.sub}</div>
       </div>
