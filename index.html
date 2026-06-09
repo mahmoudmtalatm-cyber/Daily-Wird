@@ -2182,6 +2182,13 @@ async function loadTafsir(globalN, surahN, ayahN) {
   } catch(e) { el.innerHTML='تعذر تحميل التفسير'; }
 }
 
+// Wrapper: looks up surah/ayah from _ayahMeta and calls loadTafsir
+async function loadTafsirByNum(globalN) {
+  const meta = window._ayahMeta && window._ayahMeta[globalN];
+  if(!meta) return;
+  await loadTafsir(globalN, meta.surahNum, meta.numberInSurah);
+}
+
 async function markAyahDone(g) {
   const wasDone = S.completedAyahs.includes(g);
   if(wasDone) {
@@ -2765,6 +2772,12 @@ function toggleTafsir() {
   document.querySelectorAll('.ayah-tafsir').forEach(el=>{
     el.classList.toggle('show',S.showTafsir);
   });
+  // When enabling, fetch tafsir for all visible ayahs that haven't been loaded yet
+  if(S.showTafsir && window._ayahMeta) {
+    Object.keys(window._ayahMeta).forEach(numStr => {
+      loadTafsirByNum(parseInt(numStr));
+    });
+  }
   saveS();
   showToast(S.showTafsir?'تم تفعيل التفسير':'تم إخفاء التفسير');
 }
