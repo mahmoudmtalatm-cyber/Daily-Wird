@@ -243,6 +243,86 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .skel{background:linear-gradient(90deg,var(--bg-alt) 25%,var(--border-soft) 50%,var(--bg-alt) 75%);background-size:200% 100%;animation:shim 1.5s infinite;border-radius:var(--r12)}
 @keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
+/* ── MULTI-AYAH SELECT MODE ── */
+.ayah-card.msel-candidate{cursor:pointer;border-color:var(--b200)}
+.ayah-card.msel-candidate:hover{border-color:var(--b400);background:var(--b50)}
+.dark .ayah-card.msel-candidate:hover{background:rgba(59,130,246,.08)}
+.ayah-card.msel-start{border-color:#10b981!important;background:#f0fdf4!important;border-width:2px}
+.dark .ayah-card.msel-start{background:rgba(16,185,129,.08)!important}
+.ayah-card.msel-end{border-color:#f59e0b!important;background:#fffbeb!important;border-width:2px}
+.dark .ayah-card.msel-end{background:rgba(245,158,11,.08)!important}
+.ayah-card.msel-range{border-color:var(--b300)!important;background:var(--b50)!important}
+.dark .ayah-card.msel-range{background:rgba(59,130,246,.06)!important}
+.msel-badge{position:absolute;top:10px;left:10px;font-size:.62rem;font-weight:800;padding:2px 8px;border-radius:999px;pointer-events:none;font-family:var(--fu);letter-spacing:.03em}
+.msel-badge.start-badge{background:#10b981;color:white}
+.msel-badge.end-badge{background:#f59e0b;color:white}
+
+/* ── RANGE PLAYER MODAL ── */
+#range-modal{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s ease}
+#range-modal.open{opacity:1;pointer-events:all}
+.range-sheet{background:var(--surface);border-radius:var(--r28) var(--r28) 0 0;padding:20px 16px 32px;width:100%;max-width:600px;transform:translateY(100%);transition:transform .3s cubic-bezier(.34,1.2,.64,1);max-height:90vh;overflow-y:auto}
+@media(min-width:600px){.range-sheet{max-width:720px}}
+#range-modal.open .range-sheet{transform:translateY(0)}
+.range-sheet-ttl{font-size:1rem;font-weight:800;color:var(--tx);text-align:center;margin-bottom:4px}
+.range-sheet-sub{font-size:.78rem;color:var(--tx2);text-align:center;margin-bottom:20px}
+.range-side-lbl{font-size:.78rem;font-weight:700;color:var(--tx2);letter-spacing:.05em;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.range-sel-row{display:flex;gap:8px;margin-bottom:10px}
+.range-sel-grp{display:flex;flex-direction:column;gap:4px;flex:1}
+.range-sel-lbl{font-size:.68rem;color:var(--tx3);font-weight:600;padding-right:2px}
+.range-sel{width:100%;padding:9px 10px;border-radius:var(--r12);border:1.5px solid var(--border);background:var(--surface-tinted);color:var(--tx);font-size:.82rem;font-family:var(--fu);direction:rtl;appearance:none;cursor:pointer;outline:none;transition:border-color var(--tr)}
+.range-sel:focus{border-color:var(--b400)}
+.range-ayah-preview{background:var(--surface-tinted);border:1.5px solid var(--border-soft);border-radius:var(--r12);padding:12px 14px;margin-bottom:16px;min-height:52px;font-family:var(--fq);font-size:1.05rem;line-height:2;direction:rtl;color:var(--tx);position:relative}
+.range-ayah-preview.start-side{border-right:3px solid #10b981}
+.range-ayah-preview.end-side{border-right:3px solid #f59e0b}
+.range-ayah-ref{font-size:.68rem;color:var(--tx3);font-family:var(--fu);margin-top:4px}
+.range-divider{text-align:center;font-size:.72rem;font-weight:700;color:var(--tx3);letter-spacing:.08em;margin:6px 0 14px;display:flex;align-items:center;gap:8px}
+.range-divider::before,.range-divider::after{content:'';flex:1;height:1px;background:var(--border-soft)}
+.range-summary{background:var(--b50);border:1.5px solid var(--b200);border-radius:var(--r12);padding:12px 14px;margin-bottom:18px;font-size:.85rem;color:var(--b700);font-weight:700;text-align:center;min-height:42px;display:flex;align-items:center;justify-content:center;gap:8px}
+.dark .range-summary{background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.25);color:var(--b300)}
+.range-summary.err{background:#FEF2F2;border-color:#FECACA;color:#DC2626}
+.dark .range-summary.err{background:rgba(220,38,38,.1);border-color:rgba(220,38,38,.3);color:#f87171}
+.range-reciter-row{display:flex;align-items:center;gap:10px;margin-bottom:18px;background:var(--bg-alt);border-radius:var(--r12);padding:10px 14px}
+.range-reciter-lbl{font-size:.78rem;color:var(--tx2);font-weight:600;white-space:nowrap}
+.range-reciter-sel{flex:1;padding:6px 10px;border-radius:var(--r8);border:1.5px solid var(--border);background:var(--surface);color:var(--tx);font-size:.82rem;font-family:var(--fu);direction:rtl;appearance:none;cursor:pointer;outline:none}
+.range-btns{display:flex;gap:10px}
+.range-btn-cancel{flex:1;padding:13px;border-radius:var(--r20);background:var(--bg-alt);color:var(--tx2);font-size:.9rem;font-weight:700;font-family:var(--fu);border:none;cursor:pointer;transition:all var(--tr)}
+.range-btn-play{flex:2;padding:13px;border-radius:var(--r20);background:var(--b600);color:white;font-size:.9rem;font-weight:700;font-family:var(--fu);border:none;cursor:pointer;transition:all var(--tr);display:flex;align-items:center;justify-content:center;gap:8px}
+.range-btn-play:disabled{opacity:.4;pointer-events:none}
+.range-btn-play:active{background:var(--b700);transform:scale(.97)}
+
+/* ── FLOATING PLAYER ── */
+#mplayer{position:fixed;bottom:76px;left:50%;transform:translateX(-50%) translateY(20px);width:calc(100% - 24px);max-width:580px;z-index:200;transition:transform .4s cubic-bezier(.34,1.2,.64,1),opacity .4s ease;opacity:0;pointer-events:none;display:none}
+#mplayer.visible{transform:translateX(-50%) translateY(0);opacity:1;pointer-events:all;display:block}
+@media(min-width:600px){#mplayer{max-width:700px}}
+.mplayer-inner{background:var(--surface);border-radius:var(--r20);border:1.5px solid var(--border-soft);box-shadow:0 8px 32px rgba(30,58,95,.18);padding:14px 16px;position:relative}
+.dark .mplayer-inner{box-shadow:0 8px 32px rgba(0,0,0,.4)}
+.mplayer-close{position:absolute;top:10px;left:10px;width:26px;height:26px;border-radius:50%;background:var(--bg-alt);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--tx3);transition:all var(--tr);font-size:.8rem;font-family:var(--fu)}
+.mplayer-close:hover{background:var(--border);color:var(--tx)}
+.mplayer-info{text-align:center;margin-bottom:10px;padding:0 30px}
+.mplayer-surah{font-size:.72rem;font-weight:700;color:var(--b600);letter-spacing:.04em;margin-bottom:2px}
+.dark .mplayer-surah{color:var(--b300)}
+.mplayer-ayah-txt{font-family:var(--fq);font-size:1.1rem;line-height:2;color:var(--tx);direction:rtl;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mplayer-counter{font-size:.72rem;color:var(--tx2);margin-top:3px}
+.mplayer-prog-wrap{margin:8px 0 10px;display:flex;align-items:center;gap:8px}
+.mplayer-prog{flex:1;height:4px;background:var(--bg-alt);border-radius:999px;overflow:hidden}
+.mplayer-prog-fill{height:100%;background:var(--b500);border-radius:999px;transition:width .3s linear}
+.mplayer-time{font-size:.65rem;color:var(--tx3);white-space:nowrap;min-width:28px;font-family:var(--fu)}
+.mplayer-controls{display:flex;align-items:center;justify-content:center;gap:12px}
+.mpc{width:40px;height:40px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all var(--tr)}
+.mpc-prev,.mpc-next{background:var(--bg-alt);color:var(--tx2)}
+.mpc-prev:hover,.mpc-next:hover{background:var(--border);color:var(--tx)}
+.mpc-play{width:50px;height:50px;background:var(--b600);color:white;box-shadow:0 4px 14px rgba(37,99,235,.35)}
+.mpc-play:hover{background:var(--b700)}
+.mpc-play:active{transform:scale(.94)}
+.mplayer-reciter{font-size:.65rem;color:var(--tx3);text-align:center;margin-top:6px;font-family:var(--fu)}
+
+/* ── MULTI-SELECT BUTTON IN READER ── */
+.msel-toggle{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:var(--r12);background:var(--bg-alt);border:1.5px solid var(--border);color:var(--tx2);font-size:.78rem;font-weight:700;font-family:var(--fu);cursor:pointer;transition:all var(--tr);white-space:nowrap}
+.msel-toggle.on{background:rgba(59,130,246,.1);border-color:var(--b300);color:var(--b600)}
+.dark .msel-toggle.on{background:rgba(59,130,246,.15);color:var(--b300)}
+.msel-hint{text-align:center;font-size:.75rem;color:var(--b600);background:rgba(59,130,246,.07);border-radius:var(--r12);padding:8px 12px;margin-bottom:10px;font-weight:600;border:1px dashed var(--b200)}
+.dark .msel-hint{color:var(--b300);background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.25)}
+
 /* NAV ARROWS */
 .rdr-nav{display:flex;gap:8px;margin-bottom:14px}
 .rnav-btn{flex:1;padding:10px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r12);font-size:.85rem;font-weight:700;color:var(--b600);cursor:pointer;transition:all var(--tr);font-family:var(--fu);display:flex;align-items:center;justify-content:center;gap:6px}
@@ -610,9 +690,23 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
             انتقل لموضعي
           </button>
         </div>
+        <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border-soft);display:flex;gap:8px;justify-content:flex-end">
+          <button class="msel-toggle" id="msel-toggle-btn" onclick="toggleMselMode()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            تشغيل نطاق
+          </button>
+          <button class="msel-toggle" id="range-from-sel-btn" onclick="openRangeModalFromSel()" style="display:none;background:var(--b600);border-color:var(--b600);color:white">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            تشغيل المحدد
+          </button>
+        </div>
       </div>
       <div id="rdr-nav" class="rdr-nav" style="display:none">
         <button class="rnav-btn" id="nav-prev" onclick="navigateContent(-1)">&#8249; السابق</button>
+        <button class="rnav-btn" style="flex:.6;border-color:var(--b300);color:var(--b600)" onclick="openRangeModal()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          نطاق
+        </button>
         <button class="rnav-btn" id="nav-next" onclick="navigateContent(1)">التالي &#8250;</button>
       </div>
       <div id="rdr-content">
@@ -892,6 +986,90 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 </div>
 <div id="toast"></div>
 
+<!-- RANGE PLAYER MODAL -->
+<div id="range-modal" onclick="closeRangeModal(event)">
+  <div class="range-sheet">
+    <div class="modal-drag"></div>
+    <div class="range-sheet-ttl">🎧 تشغيل نطاق من الآيات</div>
+    <div class="range-sheet-sub">اختر الآية الأولى والأخيرة وسيتم تشغيلهم متواصلاً</div>
+
+    <div class="range-side-lbl"><span style="color:#10b981">●</span> آية البداية</div>
+    <div class="range-sel-row">
+      <div class="range-sel-grp">
+        <span class="range-sel-lbl">السورة</span>
+        <select class="range-sel" id="rng-start-surah" onchange="onRangeSurahChange('start')"></select>
+      </div>
+      <div class="range-sel-grp" style="max-width:100px">
+        <span class="range-sel-lbl">الآية</span>
+        <select class="range-sel" id="rng-start-ayah" onchange="onRangeAyahChange()"></select>
+      </div>
+    </div>
+    <div class="range-ayah-preview start-side" id="rng-start-preview">
+      <span style="opacity:.4;font-family:var(--fu);font-size:.85rem">اختر السورة والآية...</span>
+    </div>
+
+    <div class="range-side-lbl"><span style="color:#f59e0b">●</span> آية النهاية</div>
+    <div class="range-sel-row">
+      <div class="range-sel-grp">
+        <span class="range-sel-lbl">السورة</span>
+        <select class="range-sel" id="rng-end-surah" onchange="onRangeSurahChange('end')"></select>
+      </div>
+      <div class="range-sel-grp" style="max-width:100px">
+        <span class="range-sel-lbl">الآية</span>
+        <select class="range-sel" id="rng-end-ayah" onchange="onRangeAyahChange()"></select>
+      </div>
+    </div>
+    <div class="range-ayah-preview end-side" id="rng-end-preview">
+      <span style="opacity:.4;font-family:var(--fu);font-size:.85rem">اختر السورة والآية...</span>
+    </div>
+
+    <div class="range-divider">ملخص التشغيل</div>
+    <div class="range-summary" id="rng-summary">اختر نطاق الآيات أولاً</div>
+
+    <div class="range-reciter-row">
+      <span class="range-reciter-lbl">🎙️ القارئ:</span>
+      <select class="range-reciter-sel" id="rng-reciter-sel"></select>
+    </div>
+
+    <div class="range-btns">
+      <button class="range-btn-cancel" onclick="document.getElementById('range-modal').classList.remove('open')">إلغاء</button>
+      <button class="range-btn-play" id="rng-play-btn" onclick="startRangePlayback()" disabled>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        ابدأ التشغيل
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- FLOATING MULTI-AYAH PLAYER -->
+<div id="mplayer">
+  <div class="mplayer-inner">
+    <button class="mplayer-close" onclick="closeMplayer()" title="إغلاق المشغل">✕</button>
+    <div class="mplayer-info">
+      <div class="mplayer-surah" id="mpl-surah">—</div>
+      <div class="mplayer-ayah-txt" id="mpl-txt">—</div>
+      <div class="mplayer-counter" id="mpl-counter">—</div>
+    </div>
+    <div class="mplayer-prog-wrap">
+      <span class="mplayer-time" id="mpl-elapsed">٠:٠٠</span>
+      <div class="mplayer-prog"><div class="mplayer-prog-fill" id="mpl-prog" style="width:0%"></div></div>
+      <span class="mplayer-time" id="mpl-dur">—</span>
+    </div>
+    <div class="mplayer-controls">
+      <button class="mpc mpc-prev" onclick="mplStep(-1)" title="الآية السابقة">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button class="mpc mpc-play" id="mpl-playbtn" onclick="mplTogglePlay()">
+        <svg id="mpl-play-ico" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      </button>
+      <button class="mpc mpc-next" onclick="mplStep(1)" title="الآية التالية">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+    <div class="mplayer-reciter" id="mpl-reciter-lbl">—</div>
+  </div>
+</div>
+
 <!-- RECITER PICKER MODAL -->
 <div id="reciter-modal" onclick="closeReciterModal(event)">
   <div class="reciter-sheet">
@@ -976,6 +1154,7 @@ let S = {
   // Daily wird tracking: { "YYYY-MM-DD": { done: bool, partial: number } }
   dailyWird:{},
   readingPos: null,       // global ayah number of reading position marker
+  readingPosSurah: null,  // surah number that contains the reading position
   completedPages: [],     // list of page numbers fully completed (for page-based progress)
 };
 let _partialTemp = 0; // temp value while stepper is open
@@ -1679,6 +1858,7 @@ function initSelectors() {
     o.textContent=`${toA(s.number)}. ${s.name}`;
     ss.appendChild(o);
   });
+  ss.value=S.lastSurah||1;
 
   // Page
   const sp=document.getElementById('sel-page-v');
@@ -1698,6 +1878,7 @@ async function loadContent() {
   else num=+document.getElementById('sel-page-v').value;
   S.currentRdrNum=num;
   S.rdrMode=mode;
+  if(!num || isNaN(num)) { showToast('يرجى اختيار سورة أو جزء'); return; }
   if(mode==='juz') S.lastJuz=num;
   else if(mode==='surah') S.lastSurah=num;
   saveS();
@@ -1719,8 +1900,20 @@ async function loadContent() {
     if(data.code!==200) throw new Error('API error');
 
     let ayahs=[];
-    if(mode==='surah') ayahs=data.data.ayahs;
-    else ayahs=data.data.ayahs;
+    if(mode==='surah') {
+      // The surah endpoint returns ayahs WITHOUT a nested `surah` property.
+      // Inject it from the top-level data so renderAyahs can access a.surah.*
+      const surahInfo = {
+        number: data.data.number,
+        name: data.data.name,
+        englishName: data.data.englishName,
+        revelationType: data.data.revelationType,
+        numberOfAyahs: data.data.numberOfAyahs
+      };
+      ayahs = data.data.ayahs.map(a => Object.assign({}, a, {surah: surahInfo}));
+    } else {
+      ayahs=data.data.ayahs;
+    }
 
     currentAyahs=ayahs;
     // ── Build / update pageAyahMap from real API page field ──
@@ -1731,6 +1924,10 @@ async function loadContent() {
       pageAyahMap[pg].add(a.number);
     });
     renderAyahs(ayahs, mode, num);
+    // Reset msel selection when new content is loaded
+    _mselStart = null; _mselEnd = null;
+    document.getElementById('range-from-sel-btn').style.display = 'none';
+    if(_mselMode) _refreshMselHighlights();
     document.getElementById('rdr-nav').style.display='flex';
     updateNavBtns(mode,num);
     // Show jump button if a reading position is set
@@ -1745,52 +1942,77 @@ async function loadContent() {
 
 function renderAyahs(ayahs, mode, num) {
   const rc=document.getElementById('rdr-content');
+
+  // Guard: if ayahs is empty or not an array, show error
+  if(!Array.isArray(ayahs) || ayahs.length === 0) {
+    rc.innerHTML='<div class="empty"><div class="empty-ico">⚠️</div><div class="empty-ttl">لا توجد آيات</div><div class="empty-sub">تعذر تحميل الآيات، حاول مرة أخرى</div></div>';
+    return;
+  }
+
+  // Build a per-ayah metadata map so we never embed raw strings in onclick
+  window._ayahMeta = {};
+  ayahs.forEach(a => {
+    window._ayahMeta[a.number] = {
+      surahName: a.surah.name,
+      surahNum: a.surah.number,
+      numberInSurah: a.numberInSurah,
+      revelationType: a.surah.revelationType,
+      numberOfAyahs: a.surah.numberOfAyahs,
+      text: a.text
+    };
+  });
+
   let html='';
 
   if(mode==='juz') {
     html+=`<div class="juz-sep"><span>الجزء ${toA(num)}</span></div>`;
   }
 
-  let lastSurah=-1;
-  ayahs.forEach(a=>{
-    const sn=a.surah.number;
-    const done=S.completedAyahs.includes(a.number);
+  // For surah mode: render header once at the top
+  if(mode==='surah' && ayahs.length > 0) {
+    const su = ayahs[0].surah;
+    const sn = su.number;
+    html+=`<div class="surah-hdr">
+      <div class="surah-name">${su.name}</div>
+      <div class="surah-meta">
+        <span class="smeta-tag">📍 ${su.revelationType==='Meccan'?'مكية':'مدنية'}</span>
+        <span class="smeta-tag">📖 ${toA(su.numberOfAyahs)} آية</span>
+      </div>
+    </div>`;
+    if(sn !== 9) html+=`<div class="bism">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>`;
+  }
 
-    if(sn!==lastSurah) {
-      if(mode!=='surah') {
-        const su=a.surah;
-        html+=`<div class="surah-hdr">
-          <div class="surah-name">${su.name}</div>
-          <div class="surah-meta">
-            <span class="smeta-tag">📍 ${su.revelationType==='Meccan'?'مكية':'مدنية'}</span>
-            <span class="smeta-tag">📖 ${toA(su.numberOfAyahs)} آية</span>
-          </div>
-        </div>`;
-        if(sn!==9&&sn!==1) html+=`<div class="bism">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>`;
-      }
-      lastSurah=sn;
-    }
+  html += '<div class="ayahs-wrap">';
 
-    if(mode==='surah'&&a.numberInSurah===1) {
+  let lastSurah = -1;
+  ayahs.forEach(a => {
+    const sn  = a.surah.number;
+    const done = S.completedAyahs.includes(a.number);
+
+    // Non-surah modes: insert surah separator when surah changes
+    if(mode !== 'surah' && sn !== lastSurah) {
+      const su = a.surah;
       html+=`<div class="surah-hdr">
-        <div class="surah-name">${a.surah.name}</div>
+        <div class="surah-name">${su.name}</div>
         <div class="surah-meta">
-          <span class="smeta-tag">📍 ${a.surah.revelationType==='Meccan'?'مكية':'مدنية'}</span>
-          <span class="smeta-tag">📖 ${toA(a.surah.numberOfAyahs)} آية</span>
+          <span class="smeta-tag">📍 ${su.revelationType==='Meccan'?'مكية':'مدنية'}</span>
+          <span class="smeta-tag">📖 ${toA(su.numberOfAyahs)} آية</span>
         </div>
       </div>`;
-      if(sn!==9) html+=`<div class="bism">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>`;
+      if(sn !== 9 && sn !== 1) html+=`<div class="bism">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>`;
+      lastSurah = sn;
     }
 
-    const bkd=S.bookmarks.some(b=>b.g===a.number);
+    const bkd = S.bookmarks.some(b => b.g === a.number);
     const posMarked = S.readingPos === a.number;
-    html+=`<div class="ayah-card ${done?'done':''}" id="ayah-${a.number}">
+    // Use data-num for all interactions — no raw strings in onclick
+    html+=`<div class="ayah-card ${done?'done':''}" id="ayah-${a.number}" data-num="${a.number}" onclick="onAyahCardClick(${a.number})" style="cursor:default">
       <div class="ayah-txt">${a.text} <span class="anum">${toA(a.numberInSurah)}</span></div>
       <div class="ayah-tafsir ${S.showTafsir?'show':''}" id="tf-${a.number}">
         <span style="opacity:.5">جاري تحميل التفسير...</span>
       </div>
       <div class="ayah-acts">
-        <button class="aact aact-bk ${bkd?'on':''}" id="bk-${a.number}" onclick="toggleBookmark(${a.number},'${a.surah.name}',${a.numberInSurah},'${encodeURIComponent(a.text)}')">
+        <button class="aact aact-bk ${bkd?'on':''}" id="bk-${a.number}" onclick="toggleBookmarkByNum(${a.number})">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="${bkd?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
           ${bkd?'محفوظ':'حفظ'}
         </button>
@@ -1814,7 +2036,7 @@ function renderAyahs(ayahs, mode, num) {
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
           ${RECITERS[S.reciter]?.label || 'القارئ'}
         </button>
-        <button class="aact aact-tf" onclick="loadTafsir(${a.number},'${a.surah.number}',${a.numberInSurah})">
+        <button class="aact aact-tf" onclick="loadTafsirByNum(${a.number})">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           تفسير
         </button>
@@ -1823,10 +2045,11 @@ function renderAyahs(ayahs, mode, num) {
     </div>`;
   });
 
-  rc.innerHTML=html;
+  html += '</div>';
+  rc.innerHTML = html;
 
   if(S.showTafsir) {
-    ayahs.forEach(a=>loadTafsir(a.number, a.surah.number, a.numberInSurah));
+    ayahs.forEach(a => loadTafsirByNum(a.number));
   }
 }
 
@@ -2003,9 +2226,13 @@ async function markAyahDone(g) {
 function setReadingPos(g) {
   if(S.readingPos === g) {
     S.readingPos = null;
+    S.readingPosSurah = null;
     showToast('تم إزالة علامة الموضع');
   } else {
     S.readingPos = g;
+    // Store which surah contains this ayah so we can load it later
+    const ayah = currentAyahs.find(a => a.number === g);
+    S.readingPosSurah = ayah ? ayah.surah.number : null;
     showToast('✅ تم حفظ موضع القراءة');
   }
   saveS();
@@ -2021,17 +2248,50 @@ function setReadingPos(g) {
   if(jb) jb.style.display = S.readingPos ? 'inline-flex' : 'none';
 }
 
-function jumpToReadingPos() {
+async function jumpToReadingPos() {
   if(!S.readingPos) { showToast('لم تضع علامة موضع بعد'); return; }
-  const el = document.getElementById('ayah-'+S.readingPos);
-  if(el) {
-    el.scrollIntoView({behavior:'smooth', block:'center'});
-    el.style.outline = '2px solid var(--g500)';
-    el.style.outlineOffset = '3px';
-    setTimeout(()=>{ el.style.outline=''; el.style.outlineOffset=''; }, 1800);
-  } else {
-    showToast('الآية غير محملة — انتقل للجزء المناسب أولاً');
+
+  // Switch to the reader
+  showView('reader');
+
+  // If the ayah is already rendered, just scroll to it
+  const existing = document.getElementById('ayah-' + S.readingPos);
+  if(existing) {
+    existing.scrollIntoView({behavior:'smooth', block:'center'});
+    _flashAyahPos(existing);
+    return;
   }
+
+  // Ayah not loaded — figure out which surah to load
+  if(!S.readingPosSurah) {
+    showToast('تعذر تحديد السورة — أعد وضع العلامة');
+    return;
+  }
+
+  // Set reader to surah mode and load the correct surah
+  rdrMode('surah');
+  document.getElementById('sel-surah-v').value = S.readingPosSurah;
+  showToast('⏳ جاري تحميل الآية...');
+
+  await loadContent();
+
+  // After content is loaded, scroll to the marked ayah
+  setTimeout(() => {
+    const el = document.getElementById('ayah-' + S.readingPos);
+    if(el) {
+      el.scrollIntoView({behavior:'smooth', block:'center'});
+      _flashAyahPos(el);
+    } else {
+      showToast('تعذر تحديد موضع الآية');
+    }
+  }, 350);
+}
+
+function _flashAyahPos(el) {
+  el.style.outline = '2.5px solid var(--g500)';
+  el.style.outlineOffset = '3px';
+  el.style.transition = 'outline .3s';
+  setTimeout(() => { el.style.outline = ''; el.style.outlineOffset = ''; }, 2000);
 }
 
 /* ─── MARK ALL UP TO ─── */
@@ -2580,6 +2840,7 @@ function resetProgress() {
   S.searchCount=0;
   S.completedPages=[];
   S.readingPos=null;
+  S.readingPosSurah=null;
   try { localStorage.removeItem('wird_pageMap'); } catch(e){}
   saveS();
   showToast('تم إعادة تعيين التقدم');
@@ -2610,6 +2871,7 @@ function resetAll() {
     wirdNum:20,
     dailyWird:{},
     readingPos: null,
+    readingPosSurah: null,
     completedPages: [],
   };
   pageAyahMap = {};
@@ -2623,6 +2885,502 @@ function resetAll() {
   renderSettings();
   showView('home');
   showToast('✅ تم إعادة ضبط التطبيق بالكامل');
+}
+
+/* ═══════════════════════════════════════════
+   MULTI-AYAH RANGE PLAYER
+═══════════════════════════════════════════ */
+
+// ── State ──
+let _mselMode = false;           // whether tap-to-select mode is active
+let _mselStart = null;           // { globalNum, surahNum, ayahNum, text, surahName }
+let _mselEnd   = null;
+
+let _rngAyahTextCache = {};      // key "surahN:ayahN" -> text
+let _rngAyahGlobals   = {};      // { start: globalNum, end: globalNum }
+let _rngFetchTimers   = { start: null, end: null };
+
+// ── floating player ──
+let _mpl = {
+  queue: [],         // array of globalAyah numbers
+  idx:   0,
+  audio: null,
+  playing: false,
+  reciter: null,
+  ayahMeta: {},     // globalNum -> { text, surahName, ayahN }
+};
+
+// ─────────────────────────────────
+// Tap-to-select mode (in reader)
+// ─────────────────────────────────
+function toggleMselMode() {
+  _mselMode = !_mselMode;
+  const btn = document.getElementById('msel-toggle-btn');
+  const playSelBtn = document.getElementById('range-from-sel-btn');
+  btn.classList.toggle('on', _mselMode);
+  if(!_mselMode) {
+    _mselStart = null; _mselEnd = null;
+    playSelBtn.style.display = 'none';
+    _refreshMselHighlights();
+  } else {
+    showToast('اضغط على آية البداية ثم آية النهاية');
+  }
+}
+
+function onAyahCardClick(globalNum) {
+  if(!_mselMode) return;
+  const ayah = currentAyahs.find(a => a.number === globalNum);
+  if(!ayah) return;
+  const meta = { globalNum, surahNum: ayah.surah.number, ayahNum: ayah.numberInSurah, text: ayah.text, surahName: ayah.surah.name };
+
+  if(!_mselStart || (_mselStart && _mselEnd)) {
+    // Start fresh selection
+    _mselStart = meta; _mselEnd = null;
+    showToast('اضغط على آية النهاية');
+  } else {
+    // Second tap = end
+    if(globalNum < _mselStart.globalNum) {
+      _mselEnd = _mselStart; _mselStart = meta;
+    } else {
+      _mselEnd = meta;
+    }
+    document.getElementById('range-from-sel-btn').style.display = 'flex';
+  }
+  _refreshMselHighlights();
+}
+
+function _refreshMselHighlights() {
+  currentAyahs.forEach(a => {
+    const card = document.getElementById('ayah-'+a.number);
+    if(!card) return;
+    // Remove old msel classes but keep existing badge
+    card.classList.remove('msel-candidate','msel-start','msel-end','msel-range');
+    const badge = card.querySelector('.msel-badge');
+    if(badge) badge.remove();
+
+    if(!_mselMode) return;
+    if(_mselStart && a.number === _mselStart.globalNum) {
+      card.classList.add('msel-start');
+      const b = document.createElement('span');
+      b.className = 'msel-badge start-badge'; b.textContent = 'بداية';
+      card.appendChild(b);
+    } else if(_mselEnd && a.number === _mselEnd.globalNum) {
+      card.classList.add('msel-end');
+      const b = document.createElement('span');
+      b.className = 'msel-badge end-badge'; b.textContent = 'نهاية';
+      card.appendChild(b);
+    } else if(_mselStart && _mselEnd && a.number > _mselStart.globalNum && a.number < _mselEnd.globalNum) {
+      card.classList.add('msel-range');
+    } else {
+      card.classList.add('msel-candidate');
+    }
+  });
+}
+
+function openRangeModalFromSel() {
+  if(!_mselStart || !_mselEnd) { openRangeModal(); return; }
+  // Pre-fill modal with the selected range
+  openRangeModal(_mselStart.surahNum, _mselStart.ayahNum, _mselEnd.surahNum, _mselEnd.ayahNum);
+}
+
+// ─────────────────────────────────
+// Range Modal
+// ─────────────────────────────────
+const RECITER_META_FULL = {
+  'ar.alafasy':        { name: 'مشاري راشد العفاسي' },
+  'ar.mahermuaiqly':   { name: 'ماهر المعيقلي' },
+  'ar.husary':         { name: 'محمود خليل الحصري' },
+  'ar.minshawi':       { name: 'محمد صديق المنشاوي' },
+  'ar.muhammadayyoub': { name: 'محمد أيوب' },
+  'ar.shaatree':       { name: 'أبو بكر الشاطري' },
+  'ar.ahmedajamy':     { name: 'أحمد العجمي' },
+};
+let _rngAyahCounts = {};
+
+function openRangeModal(startSurah, startAyah, endSurah, endAyah) {
+  // Populate surah selects
+  ['rng-start-surah','rng-end-surah'].forEach(id => {
+    const sel = document.getElementById(id);
+    sel.innerHTML = '';
+    surahs.forEach(s => {
+      _rngAyahCounts[s.number] = s.numberOfAyahs;
+      const o = document.createElement('option');
+      o.value = s.number;
+      o.textContent = `${toA(s.number)}. ${s.name}`;
+      sel.appendChild(o);
+    });
+  });
+
+  // Populate reciter select
+  const rsel = document.getElementById('rng-reciter-sel');
+  rsel.innerHTML = '';
+  Object.entries(RECITER_META_FULL).forEach(([id, m]) => {
+    const o = document.createElement('option');
+    o.value = id; o.textContent = m.name;
+    if(id === (S.reciter || 'ar.alafasy')) o.selected = true;
+    rsel.appendChild(o);
+  });
+
+  // Set defaults
+  const ss = startSurah || S.lastSurah || 1;
+  const sa = startAyah  || 1;
+  const es = endSurah   || S.lastSurah || 1;
+  const ea = endAyah    || (_rngAyahCounts[es] || 1);
+
+  document.getElementById('rng-start-surah').value = ss;
+  document.getElementById('rng-end-surah').value   = es;
+  _populateRngAyahs('start', sa);
+  _populateRngAyahs('end', ea);
+  _scheduleRngFetch('start');
+  _scheduleRngFetch('end');
+  updateRangeSummary();
+
+  document.getElementById('range-modal').classList.add('open');
+}
+
+function closeRangeModal(e) {
+  if(e && e.target !== document.getElementById('range-modal')) return;
+  document.getElementById('range-modal').classList.remove('open');
+}
+
+function _populateRngAyahs(side, selectVal) {
+  const surahNum = parseInt(document.getElementById(`rng-${side}-surah`).value);
+  const count = _rngAyahCounts[surahNum] || 1;
+  const sel = document.getElementById(`rng-${side}-ayah`);
+  sel.innerHTML = '';
+  for(let i = 1; i <= count; i++) {
+    const o = document.createElement('option');
+    o.value = i; o.textContent = toA(i);
+    sel.appendChild(o);
+  }
+  if(selectVal) sel.value = Math.min(selectVal, count);
+}
+
+function onRangeSurahChange(side) {
+  _populateRngAyahs(side, side === 'end' ? _rngAyahCounts[parseInt(document.getElementById('rng-end-surah').value)] : 1);
+  _scheduleRngFetch(side);
+  updateRangeSummary();
+}
+
+function onRangeAyahChange() {
+  updateRangeSummary();
+  // debounce fetch for both sides
+  _scheduleRngFetch('start');
+  _scheduleRngFetch('end');
+}
+
+function _scheduleRngFetch(side) {
+  clearTimeout(_rngFetchTimers[side]);
+  _rngFetchTimers[side] = setTimeout(() => _fetchRngAyahText(side), 350);
+}
+
+async function _fetchRngAyahText(side) {
+  const surahNum = parseInt(document.getElementById(`rng-${side}-surah`).value);
+  const ayahNum  = parseInt(document.getElementById(`rng-${side}-ayah`).value);
+  if(!surahNum || !ayahNum) return;
+  const key = `${surahNum}:${ayahNum}`;
+  const prevEl = document.getElementById(`rng-${side}-preview`);
+
+  // Check loaded ayahs first
+  const loaded = currentAyahs.find(a => a.surah.number === surahNum && a.numberInSurah === ayahNum);
+  if(loaded) _rngAyahTextCache[key] = loaded.text;
+
+  if(!_rngAyahTextCache[key]) {
+    prevEl.innerHTML = '<span style="opacity:.4;font-family:var(--fu);font-size:.85rem">جاري التحميل...</span>';
+    try {
+      const res = await fetch(`${API}/ayah/${surahNum}:${ayahNum}/quran-uthmani`);
+      const data = await res.json();
+      if(data.code === 200) _rngAyahTextCache[key] = data.data.text;
+    } catch(e) {}
+  }
+
+  const surahName = surahs.find(s => s.number === surahNum)?.name || '';
+  const globalNum = _getGlobalNum(surahNum, ayahNum);
+  _rngAyahGlobals[side] = globalNum;
+
+  if(_rngAyahTextCache[key]) {
+    prevEl.innerHTML = `<span>${_rngAyahTextCache[key]} <span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--b100);color:var(--b700);font-size:.6rem;font-weight:700;font-family:var(--fu);vertical-align:middle">${toA(ayahNum)}</span></span><div class="range-ayah-ref">${surahName} · آية ${toA(ayahNum)}</div>`;
+  } else {
+    prevEl.innerHTML = '<span style="opacity:.4;font-family:var(--fu);font-size:.85rem">تعذر تحميل الآية</span>';
+  }
+  updateRangeSummary();
+}
+
+function _getGlobalNum(surahNum, ayahNum) {
+  let g = 0;
+  for(let i = 1; i < surahNum; i++) g += (_rngAyahCounts[i] || _markAyahCounts[i] || 0);
+  return g + ayahNum;
+}
+
+function updateRangeSummary() {
+  const ss = parseInt(document.getElementById('rng-start-surah').value);
+  const sa = parseInt(document.getElementById('rng-start-ayah').value);
+  const es = parseInt(document.getElementById('rng-end-surah').value);
+  const ea = parseInt(document.getElementById('rng-end-ayah').value);
+  const startG = _getGlobalNum(ss, sa);
+  const endG   = _getGlobalNum(es, ea);
+  const btn    = document.getElementById('rng-play-btn');
+  const sum    = document.getElementById('rng-summary');
+  if(endG < startG) {
+    sum.className = 'range-summary err';
+    sum.textContent = '⚠️ آية النهاية يجب أن تكون بعد آية البداية';
+    btn.disabled = true;
+    return;
+  }
+  const count = endG - startG + 1;
+  const startSurahName = surahs.find(s => s.number === ss)?.name || '';
+  const endSurahName   = surahs.find(s => s.number === es)?.name || '';
+  sum.className = 'range-summary';
+  sum.innerHTML = `<span>${startSurahName} ${toA(sa)}</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg><span>${endSurahName} ${toA(ea)}</span>&nbsp;·&nbsp;<b>${toA(count)} آية</b>`;
+  btn.disabled = false;
+}
+
+async function startRangePlayback() {
+  const ss = parseInt(document.getElementById('rng-start-surah').value);
+  const sa = parseInt(document.getElementById('rng-start-ayah').value);
+  const es = parseInt(document.getElementById('rng-end-surah').value);
+  const ea = parseInt(document.getElementById('rng-end-ayah').value);
+  const startG = _getGlobalNum(ss, sa);
+  const endG   = _getGlobalNum(es, ea);
+  if(endG < startG) return;
+
+  const reciter = document.getElementById('rng-reciter-sel').value;
+  S.reciter = reciter; S.reciterChosen = true; saveS();
+
+  document.getElementById('range-modal').classList.remove('open');
+
+  // Build queue & meta — we'll fill meta lazily per ayah
+  const queue = [];
+  for(let g = startG; g <= endG; g++) queue.push(g);
+
+  // Collect known texts from cache and currently loaded ayahs
+  const ayahMeta = {};
+  for(let g = startG; g <= endG; g++) {
+    // Try to resolve surahNum + ayahNum + text from currentAyahs
+    const loaded = currentAyahs.find(a => a.number === g);
+    if(loaded) {
+      ayahMeta[g] = { text: loaded.text, surahName: loaded.surah.name, ayahN: loaded.numberInSurah };
+    }
+  }
+  // Also fill from rngAyahTextCache for start/end
+  [[ss,sa,startG],[es,ea,endG]].forEach(([sn,an,gn]) => {
+    if(!ayahMeta[gn]) {
+      const key = `${sn}:${an}`;
+      const sName = surahs.find(s => s.number === sn)?.name || '';
+      if(_rngAyahTextCache[key]) ayahMeta[gn] = { text: _rngAyahTextCache[key], surahName: sName, ayahN: an };
+    }
+  });
+
+  _mplSessionId++; // cancel any previous session's callbacks
+  _mpl = { queue, idx: 0, audio: null, playing: false, reciter, ayahMeta };
+  _mplLaunchPlay();
+}
+
+// ─────────────────────────────────
+// Floating Player Engine
+// ─────────────────────────────────
+
+// Prefetch cache: globalAyahNum -> Audio object (preloaded)
+let _mplPrefetchCache = {};
+let _mplSessionId = 0;  // increment on every new session to cancel stale callbacks
+
+function _mplAudioUrl(g) {
+  return `https://cdn.islamic.network/quran/audio/128/${_mpl.reciter}/${g}.mp3`;
+}
+
+// Prefetch up to N upcoming ayahs silently
+function _mplPrefetch(fromIdx, count = 3) {
+  const { queue, reciter } = _mpl;
+  for (let i = fromIdx; i < Math.min(fromIdx + count, queue.length); i++) {
+    const g = queue[i];
+    if (_mplPrefetchCache[g]) continue; // already cached
+    const a = new Audio();
+    a.preload = 'auto';
+    a.src = `https://cdn.islamic.network/quran/audio/128/${reciter}/${g}.mp3`;
+    _mplPrefetchCache[g] = a;
+  }
+}
+
+function _mplLaunchPlay() {
+  // Tear down previous audio cleanly WITHOUT touching _mpl.audio.src
+  // (setting src='' triggers onerror on Firefox/Safari, breaking the chain)
+  if (_mpl.audio) {
+    const old = _mpl.audio;
+    old.onended = null;
+    old.onerror = null;
+    old.ontimeupdate = null;
+    old.pause();
+    _mpl.audio = null;
+  }
+
+  const { queue, idx, reciter, ayahMeta } = _mpl;
+  if (idx < 0 || idx >= queue.length) { closeMplayer(); return; }
+
+  const g = queue[idx];
+  const meta = ayahMeta[g];
+  const reciterName = RECITER_META_FULL[reciter]?.name || reciter;
+  const sessionId = _mplSessionId; // capture for stale-check
+
+  // Update UI
+  document.getElementById('mpl-surah').textContent   = meta ? meta.surahName : '—';
+  document.getElementById('mpl-txt').textContent     = meta ? meta.text : `آية ${toA(g)}`;
+  document.getElementById('mpl-counter').textContent = `${toA(idx + 1)} من ${toA(queue.length)}`;
+  document.getElementById('mpl-reciter-lbl').textContent = reciterName;
+  document.getElementById('mpl-prog').style.width = '0%';
+  document.getElementById('mpl-elapsed').textContent = '٠:٠٠';
+  document.getElementById('mpl-dur').textContent = '—';
+  _setMplIcon(true);
+  const mplEl = document.getElementById('mplayer');
+  mplEl.style.display = 'block';
+  requestAnimationFrame(() => mplEl.classList.add('visible'));
+  _mplHighlightCard(g);
+
+  // Prefetch next 3 ayahs immediately
+  _mplPrefetch(idx + 1, 3);
+
+  // Use prefetched Audio if available, else create new
+  let audio = _mplPrefetchCache[g] || new Audio(_mplAudioUrl(g));
+  delete _mplPrefetchCache[g]; // take ownership
+  if (!audio.src || audio.src === window.location.href) {
+    audio.src = _mplAudioUrl(g);
+    audio.preload = 'auto';
+  }
+  _mpl.audio = audio;
+  _mpl.playing = true;
+
+  audio.ontimeupdate = () => {
+    if (sessionId !== _mplSessionId) return; // stale
+    if (!audio.duration) return;
+    const pct = (audio.currentTime / audio.duration) * 100;
+    document.getElementById('mpl-prog').style.width = pct + '%';
+    document.getElementById('mpl-elapsed').textContent = _fmtTime(audio.currentTime);
+    document.getElementById('mpl-dur').textContent     = _fmtTime(audio.duration);
+  };
+
+  audio.onended = () => {
+    if (sessionId !== _mplSessionId) return; // stale callback — ignore
+    _mplHighlightCard(null);
+    if (_mpl.idx + 1 < _mpl.queue.length) {
+      _mpl.idx++;
+      _mplLaunchPlay();
+    } else {
+      // Finished all ayahs
+      _setMplIcon(false);
+      _mpl.playing = false;
+      document.getElementById('mpl-prog').style.width = '100%';
+      document.getElementById('mpl-counter').textContent = 'انتهى التشغيل ✓';
+    }
+  };
+
+  audio.onerror = () => {
+    if (sessionId !== _mplSessionId) return;
+    // Skip broken ayah and continue
+    if (_mpl.idx + 1 < _mpl.queue.length) {
+      _mpl.idx++;
+      _mplLaunchPlay();
+    } else {
+      closeMplayer();
+    }
+  };
+
+  // If audio is already loaded (prefetched), play immediately; else load first
+  const doPlay = () => audio.play().catch(() => {
+    if (sessionId !== _mplSessionId) return;
+    showToast('تعذر تشغيل الصوت');
+  });
+
+  if (audio.readyState >= 3) { // HAVE_FUTURE_DATA
+    doPlay();
+  } else {
+    audio.oncanplay = () => { audio.oncanplay = null; doPlay(); };
+    audio.load();
+  }
+}
+
+function _mplHighlightCard(g) {
+  document.querySelectorAll('.ayah-card').forEach(c => {
+    c.style.outline = '';
+    c.style.outlineOffset = '';
+  });
+  if (g) {
+    const card = document.getElementById('ayah-' + g);
+    if (card) {
+      card.style.outline = '2px solid var(--b400)';
+      card.style.outlineOffset = '2px';
+      card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }
+}
+
+function _mplStop() {
+  if (_mpl.audio) {
+    const old = _mpl.audio;
+    old.onended  = null;
+    old.onerror  = null;
+    old.ontimeupdate = null;
+    old.oncanplay = null;
+    old.pause();
+    _mpl.audio = null;
+  }
+  // Clear prefetch cache
+  Object.values(_mplPrefetchCache).forEach(a => { a.oncanplay = null; a.src = ''; });
+  _mplPrefetchCache = {};
+}
+
+function mplTogglePlay() {
+  if (!_mpl.audio) { _mplLaunchPlay(); return; }
+  if (!_mpl.audio.paused) {
+    _mpl.audio.pause();
+    _mpl.playing = false;
+    _setMplIcon(false);
+  } else {
+    _mpl.audio.play().catch(() => {});
+    _mpl.playing = true;
+    _setMplIcon(true);
+  }
+}
+
+function mplStep(dir) {
+  const next = _mpl.idx + dir;
+  if (next < 0 || next >= _mpl.queue.length) return;
+  _mplSessionId++; // invalidate any in-flight onended/onerror from old audio
+  _mpl.idx = next;
+  _mplLaunchPlay();
+}
+
+function closeMplayer() {
+  _mplSessionId++; // cancel any pending callbacks
+  _mplStop();
+  _mpl.playing = false;
+  _mpl.queue = [];
+  _mplHighlightCard(null);
+  const mplEl = document.getElementById('mplayer');
+  mplEl.classList.remove('visible');
+  setTimeout(() => { mplEl.style.display = 'none'; }, 420);
+  // Exit msel mode completely
+  _mselMode = false;
+  _mselStart = null;
+  _mselEnd = null;
+  const toggleBtn = document.getElementById('msel-toggle-btn');
+  const selPlayBtn = document.getElementById('range-from-sel-btn');
+  if (toggleBtn) toggleBtn.classList.remove('on');
+  if (selPlayBtn) selPlayBtn.style.display = 'none';
+  _refreshMselHighlights();
+}
+
+function _setMplIcon(playing) {
+  const ico = document.getElementById('mpl-play-ico');
+  if (!ico) return;
+  ico.innerHTML = playing
+    ? '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'
+    : '<polygon points="5 3 19 12 5 21 5 3"/>';
+}
+
+function _fmtTime(sec) {
+  if (!sec || isNaN(sec)) return '٠:٠٠';
+  const m = Math.floor(sec / 60);
+  const s = Math.floor(sec % 60);
+  return toA(m) + ':' + (s < 10 ? '٠' : '') + toA(s);
 }
 
 /* ═══════════════════════════════════════════
@@ -2665,6 +3423,7 @@ async function init() {
   surahs.forEach((s,i)=>{ if(!s.numberOfAyahs) s.numberOfAyahs=SURAH_AYAHS[i]||1; });
 
   initSelectors();
+  rdrMode(S.rdrMode||'juz');
   renderHome();
   updateWirdConfigLabel();
   updateWirdSettingsSub();
