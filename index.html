@@ -209,6 +209,9 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .aact-pos{background:var(--b50);color:var(--tx2)}.aact-pos.on{background:#F0FDF4;color:#16a34a;border:1px solid #bbf7d0}
 .aact-upto{background:var(--b50);color:var(--b600)}
 .aact-upto:active{background:var(--b100)}
+.aact-audio{background:var(--b50);color:var(--b600);min-width:32px}
+.aact-audio.playing{background:var(--b500);color:white;animation:pulse-ring .9s ease-in-out infinite}
+@keyframes pulse-ring{0%,100%{box-shadow:0 0 0 0 rgba(59,130,246,.4)}50%{box-shadow:0 0 0 5px rgba(59,130,246,0)}}
 .aact-num{margin-right:auto;font-size:.72rem;color:var(--tx3);margin-inline-start:auto;padding:4px 8px;background:var(--bg-alt);border-radius:999px;font-family:var(--fu)}
 
 /* SKELETON */
@@ -392,12 +395,20 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .dark .mark-preview.error{background:rgba(220,38,38,.08);border-color:rgba(220,38,38,.2);color:#FCA5A5}
 .mark-ayah-preview{background:var(--surface-tinted);border:1.5px solid var(--border);border-radius:var(--r12);padding:11px 14px;margin-top:8px;margin-bottom:4px;min-height:48px;transition:all var(--tr)}
 .mark-ayah-preview.loading{opacity:.5}
-.mark-ayah-preview-txt{font-family:var(--fq);font-size:1.05rem;line-height:2.2;color:var(--tx);direction:rtl;text-align:right}
+.mark-ayah-preview-body{display:flex;align-items:flex-start;gap:10px}
+.mark-ayah-preview-txt{font-family:var(--fq);font-size:1.05rem;line-height:2.2;color:var(--tx);direction:rtl;text-align:right;flex:1}
 .mark-ayah-preview-ref{font-size:.68rem;color:var(--tx2);margin-top:4px;text-align:left;direction:ltr}
 .mark-ayah-preview.start-side{border-color:#86EFAC;background:#F0FDF4}
 .dark .mark-ayah-preview.start-side{border-color:rgba(134,239,172,.25);background:rgba(134,239,172,.05)}
 .mark-ayah-preview.end-side{border-color:#FCA5A5;background:#FFF1F2}
 .dark .mark-ayah-preview.end-side{border-color:rgba(252,165,165,.25);background:rgba(252,165,165,.05)}
+.ayah-play-btn{flex-shrink:0;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;transition:all var(--tr);margin-top:4px}
+.ayah-play-btn.start{background:#D1FAE5;color:#059669}
+.ayah-play-btn.end{background:#FFE4E6;color:#E11D48}
+.ayah-play-btn:hover{transform:scale(1.1)}
+.ayah-play-btn:active{transform:scale(.93)}
+.ayah-play-btn.playing{animation:pulse-ring .9s ease-in-out infinite}
+@keyframes pulse-ring{0%,100%{box-shadow:0 0 0 0 rgba(59,130,246,.4)}50%{box-shadow:0 0 0 7px rgba(59,130,246,.0)}}
 .mark-btn-confirm{flex:2;padding:13px;background:linear-gradient(135deg,var(--b600),var(--b500));color:white;border-radius:var(--r20);font-size:.92rem;font-weight:800;font-family:var(--fu);cursor:pointer;border:none;transition:all var(--tr);box-shadow:0 4px 16px rgba(37,99,235,.25)}
 .mark-btn-confirm:active{transform:scale(.98);opacity:.9}
 .mark-btn-confirm:disabled{opacity:.4;pointer-events:none}
@@ -836,6 +847,10 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
     </div>
     <div class="mark-ayah-preview start-side" id="mark-start-preview">
       <div class="mark-ayah-preview-txt" id="mark-start-preview-txt" style="opacity:.4">اختر السورة والآية...</div>
+      <button class="ayah-play-btn-full" id="mark-start-play-btn" onclick="toggleMarkAyahAudio('start')" disabled>
+        <svg id="mark-start-play-ico" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <span id="mark-start-play-lbl">استمع للآية</span>
+      </button>
     </div>
 
     <div style="font-size:.78rem;font-weight:700;color:var(--tx2);letter-spacing:.05em;margin-bottom:10px;margin-top:16px">🔴 النهاية</div>
@@ -851,13 +866,17 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
     </div>
     <div class="mark-ayah-preview end-side" id="mark-end-preview">
       <div class="mark-ayah-preview-txt" id="mark-end-preview-txt" style="opacity:.4">اختر السورة والآية...</div>
+      <button class="ayah-play-btn-full" id="mark-end-play-btn" onclick="toggleMarkAyahAudio('end')" disabled>
+        <svg id="mark-end-play-ico" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <span id="mark-end-play-lbl">استمع للآية</span>
+      </button>
     </div>
 
     <div class="mark-divider">معاينة</div>
     <div class="mark-preview" id="mark-preview">اختر النطاق لرؤية المعاينة</div>
 
     <div class="mark-btns">
-      <button class="mark-btn-cancel" onclick="document.getElementById('mark-modal').classList.remove('open')">تخطي</button>
+      <button class="mark-btn-cancel" onclick="stopMarkAudio();document.getElementById('mark-modal').classList.remove('open')">تخطي</button>
       <button class="mark-btn-confirm" id="mark-confirm-btn" onclick="confirmMarkReading()" disabled>✓ سجّل القراءة</button>
     </div>
   </div>
@@ -1252,11 +1271,89 @@ function toggleWirdDone() {
 let _markAyahCounts = {}; // surahNumber -> ayahCount, cached from surahs list
 let _markAyahTextCache = {}; // "surah:ayah" -> text string
 let _markFetchTimers = { start: null, end: null };
+let _markAudio = null;          // single Audio instance reused
+let _markAudioSide = null;      // which side is currently playing: 'start' | 'end'
+let _markAyahGlobal = { start: null, end: null }; // global ayah number per side
+
+// ── Ayah reader audio ──
+let _rdrAudio = null;
+let _rdrAudioGlobal = null;     // global ayah number currently loaded
+
+const RECITERS = {
+  'ar.alafasy':      { label: 'العفاسي',     id: 'ar.alafasy' },
+  'ar.abdurrahmaansudais': { label: 'السديس', id: 'ar.abdurrahmaansudais' },
+  'ar.husary':       { label: 'الحصري',      id: 'ar.husary' },
+  'ar.muhammadayyoub': { label: 'أيوب',      id: 'ar.muhammadayyoub' },
+  'ar.mahermuaiqly': { label: 'المعيقلي',    id: 'ar.mahermuaiqly' },
+};
+
+function getAudioUrl(globalAyah) {
+  const reciter = S.reciter || 'ar.alafasy';
+  return `https://cdn.islamic.network/quran/audio/128/${reciter}/${globalAyah}.mp3`;
+}
+
+function toggleMarkAyahAudio(side) {
+  const globalAyah = _markAyahGlobal[side];
+  if(!globalAyah) return;
+
+  const playBtn = document.getElementById(`mark-${side}-play-btn`);
+  const playIco = document.getElementById(`mark-${side}-play-ico`);
+
+  // If same side is playing — pause it
+  if(_markAudio && _markAudioSide === side && !_markAudio.paused) {
+    _markAudio.pause();
+    setPlayIcon(side, false);
+    return;
+  }
+
+  // Stop whatever is playing
+  stopMarkAudio();
+
+  // Start new playback
+  _markAudio = new Audio(getAudioUrl(globalAyah));
+  _markAudioSide = side;
+  _markAudio.play().catch(() => showToast('تعذر تشغيل الصوت'));
+  setPlayIcon(side, true);
+
+  _markAudio.onended = () => { setPlayIcon(side, false); _markAudio = null; _markAudioSide = null; };
+  _markAudio.onerror = () => { setPlayIcon(side, false); showToast('تعذر تحميل الصوت'); _markAudio = null; _markAudioSide = null; };
+}
+
+function setPlayIcon(side, playing) {
+  const btn = document.getElementById(`mark-${side}-play-btn`);
+  const ico = document.getElementById(`mark-${side}-play-ico`);
+  if(!btn || !ico) return;
+  btn.classList.toggle('playing', playing);
+  ico.innerHTML = playing
+    ? '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'  // pause icon
+    : '<polygon points="5 3 19 12 5 21 5 3"/>';  // play icon
+}
+
+function stopMarkAudio() {
+  if(_markAudio) {
+    _markAudio.pause();
+    _markAudio.src = '';
+    if(_markAudioSide) setPlayIcon(_markAudioSide, false);
+    _markAudio = null;
+    _markAudioSide = null;
+  }
+}
 
 async function fetchMarkAyahText(side, surahNum, ayahNum) {
   const key = `${surahNum}:${ayahNum}`;
   const txtEl = document.getElementById(`mark-${side}-preview-txt`);
   const boxEl = document.getElementById(`mark-${side}-preview`);
+  const playBtn = document.getElementById(`mark-${side}-play-btn`);
+
+  // Stop audio if playing for this side
+  if(_markAudioSide === side) stopMarkAudio();
+
+  // Compute global ayah number and store it
+  const globalAyah = getGlobalAyahNum(surahNum, ayahNum);
+  _markAyahGlobal[side] = globalAyah;
+
+  // Hide play button while loading
+  if(playBtn) playBtn.style.display = 'none';
 
   // Show loading
   txtEl.style.opacity = '.4';
@@ -1265,9 +1362,7 @@ async function fetchMarkAyahText(side, surahNum, ayahNum) {
 
   // Check currently loaded ayahs first (no fetch needed)
   const loaded = currentAyahs.find(a => a.surah.number === surahNum && a.numberInSurah === ayahNum);
-  if(loaded) {
-    _markAyahTextCache[key] = loaded.text;
-  }
+  if(loaded) _markAyahTextCache[key] = loaded.text;
 
   if(!_markAyahTextCache[key]) {
     try {
@@ -1282,10 +1377,10 @@ async function fetchMarkAyahText(side, surahNum, ayahNum) {
     const surahName = surahs.find(s => s.number === surahNum)?.name || '';
     txtEl.style.opacity = '1';
     txtEl.innerHTML = `${_markAyahTextCache[key]} <span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--b100);color:var(--b700);font-size:.6rem;font-weight:700;font-family:var(--fu);vertical-align:middle;margin-inline:3px">${toA(ayahNum)}</span>`;
-    // Add surah ref below
     let refEl = boxEl.querySelector('.mark-ayah-preview-ref');
     if(!refEl) { refEl = document.createElement('div'); refEl.className = 'mark-ayah-preview-ref'; boxEl.appendChild(refEl); }
     refEl.textContent = `${surahName} · آية ${toA(ayahNum)}`;
+    if(playBtn) playBtn.style.display = 'flex';
   } else {
     txtEl.style.opacity = '.4';
     txtEl.textContent = 'تعذر تحميل الآية';
@@ -1335,8 +1430,10 @@ function openMarkReadingModal() {
 }
 
 function closeMarkModal(e) {
-  if(e.target === document.getElementById('mark-modal'))
+  if(e.target === document.getElementById('mark-modal')) {
+    stopMarkAudio();
     document.getElementById('mark-modal').classList.remove('open');
+  }
 }
 
 function populateMarkAyahs(side, selectLast = false) {
@@ -1410,6 +1507,7 @@ function updateMarkPreview() {
 async function confirmMarkReading() {
   const r = getMarkRange();
   if(!r.valid) return;
+  stopMarkAudio();
 
   const btn = document.getElementById('mark-confirm-btn');
   btn.disabled = true;
@@ -1587,6 +1685,8 @@ async function loadContent() {
   const rc=document.getElementById('rdr-content');
   rc.innerHTML='<div class="ayahs-wrap">'+Array(6).fill('<div class="skel" style="height:110px"></div>').join('')+'</div>';
   document.getElementById('rdr-nav').style.display='none';
+  // Stop any playing ayah audio
+  if(_rdrAudio) { _rdrAudio.pause(); _rdrAudio.src=''; _rdrAudio=null; _rdrAudioGlobal=null; }
 
   try {
     let endpoint;
@@ -1686,6 +1786,10 @@ function renderAyahs(ayahs, mode, num) {
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
           حتى هنا
         </button>
+        <button class="aact aact-audio" id="aud-${a.number}" onclick="toggleAyahAudio(${a.number})" title="استمع للآية">
+          <svg id="aud-ico-${a.number}" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          استمع
+        </button>
         <button class="aact aact-tf" onclick="loadTafsir(${a.number},'${a.surah.number}',${a.numberInSurah})">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           تفسير
@@ -1700,6 +1804,40 @@ function renderAyahs(ayahs, mode, num) {
   if(S.showTafsir) {
     ayahs.forEach(a=>loadTafsir(a.number, a.surah.number, a.numberInSurah));
   }
+}
+
+/* ─── AYAH AUDIO (reader) ─── */
+function toggleAyahAudio(globalAyah) {
+  // If same ayah is playing → pause
+  if(_rdrAudio && _rdrAudioGlobal === globalAyah && !_rdrAudio.paused) {
+    _rdrAudio.pause();
+    _setAyahAudioIcon(globalAyah, false);
+    return;
+  }
+  // Stop whatever is playing
+  if(_rdrAudio) {
+    _rdrAudio.pause();
+    _rdrAudio.src = '';
+    if(_rdrAudioGlobal && _rdrAudioGlobal !== globalAyah) _setAyahAudioIcon(_rdrAudioGlobal, false);
+    _rdrAudio = null;
+  }
+  // Start playback
+  _rdrAudioGlobal = globalAyah;
+  _rdrAudio = new Audio(getAudioUrl(globalAyah));
+  _rdrAudio.play().catch(() => showToast('تعذر تشغيل الصوت'));
+  _setAyahAudioIcon(globalAyah, true);
+  _rdrAudio.onended = () => { _setAyahAudioIcon(globalAyah, false); _rdrAudio = null; _rdrAudioGlobal = null; };
+  _rdrAudio.onerror = () => { _setAyahAudioIcon(globalAyah, false); showToast('تعذر تحميل الصوت'); _rdrAudio = null; _rdrAudioGlobal = null; };
+}
+
+function _setAyahAudioIcon(globalAyah, playing) {
+  const btn = document.getElementById('aud-' + globalAyah);
+  const ico = document.getElementById('aud-ico-' + globalAyah);
+  if(!btn || !ico) return;
+  btn.classList.toggle('playing', playing);
+  ico.innerHTML = playing
+    ? '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'
+    : '<polygon points="5 3 19 12 5 21 5 3"/>';
 }
 
 async function loadTafsir(globalN, surahN, ayahN) {
