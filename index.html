@@ -661,8 +661,12 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
           <div class="set-cnt"><div class="set-ttl">مسح الإشارات</div><div class="set-sub">حذف جميع الإشارات المحفوظة</div></div>
         </div>
         <div class="set-item" onclick="resetProgress()">
-          <div class="set-icon red">🔄</div>
-          <div class="set-cnt"><div class="set-ttl" style="color:#EF4444">إعادة تعيين التقدم</div><div class="set-sub">مسح كل بيانات القراءة</div></div>
+          <div class="set-icon">🔄</div>
+          <div class="set-cnt"><div class="set-ttl" style="color:#F59E0B">إعادة تعيين التقدم فقط</div><div class="set-sub">مسح بيانات القراءة والتقدم مع الإبقاء على الإعدادات</div></div>
+        </div>
+        <div class="set-item" onclick="resetAll()">
+          <div class="set-icon">⚠️</div>
+          <div class="set-cnt"><div class="set-ttl" style="color:#EF4444">إعادة ضبط كامل للتطبيق</div><div class="set-sub">مسح كل شيء — الإعدادات والتقدم والبيانات</div></div>
         </div>
       </div>
 
@@ -729,7 +733,7 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
       <div class="wird-num-row">
           <div class="wird-stepper">
             <button class="ws-btn" onclick="changeWirdNum(-1)">−</button>
-            <input class="ws-input" id="ws-display" type="number" min="1" max="300" value="20"
+            <input class="ws-input" id="ws-display" type="number" min="1" value="20"
               oninput="onWirdNumInput(this)" onblur="onWirdNumBlur(this)" onclick="this.select()">
             <button class="ws-btn" onclick="changeWirdNum(1)">+</button>
           </div>
@@ -1157,6 +1161,7 @@ function toggleWirdDone() {
     saveS();
     renderHome();
     showToast('ما شاء الله! أتممت ورد اليوم 🌟');
+    setTimeout(() => showToast('💡 تنبيه: الورد المكتمل يُضاف للتقدم فقط عند القراءة من قسم القراءة'), 3200);
   }
 }
 
@@ -1640,7 +1645,7 @@ function openWirdModal() {
   document.getElementById('wt-ayahs').classList.toggle('on', S.wirdType==='ayahs');
   document.getElementById('wt-pages').classList.toggle('on', S.wirdType==='pages');
   document.getElementById('ws-display').value = S.wirdNum;
-  document.getElementById('ws-display').max = S.wirdType==='pages' ? 30 : 300;
+  document.getElementById('ws-display').max = '';
   document.getElementById('wird-num-lbl').textContent = S.wirdType==='ayahs' ? '📖 عدد الآيات يومياً' : '📄 عدد الصفحات يومياً';
   document.getElementById('tog-notif').classList.toggle('on', S.notifEnabled);
   document.getElementById('notif-time-input').value = S.notifTime;
@@ -1665,20 +1670,18 @@ function setWirdType(t) {
   document.getElementById('wt-pages').classList.toggle('on', t==='pages');
   document.getElementById('wird-num-lbl').textContent = t==='ayahs' ? '📖 عدد الآيات يومياً' : '📄 عدد الصفحات يومياً';
   const inp = document.getElementById('ws-display');
-  const max = t==='pages' ? 30 : 300;
-  inp.max = max;
-  // Adjust to sensible default if out of range
-  if(t==='pages' && S.wirdNum > 30) { S.wirdNum=5; inp.value=5; }
-  if(t==='ayahs' && S.wirdNum < 5) { S.wirdNum=20; inp.value=20; }
+  inp.max = '';
+  // Adjust to sensible default if switching types
+  if(t==='pages' && S.wirdNum > 604) { S.wirdNum=5; inp.value=5; }
+  if(t==='ayahs' && S.wirdNum < 1) { S.wirdNum=20; inp.value=20; }
 }
 
 function changeWirdNum(delta) {
   const inp = document.getElementById('ws-display');
   const min = 1;
-  const max = S.wirdType==='pages' ? 30 : 300;
   const step = S.wirdType==='pages' ? 1 : 5;
   const current = parseInt(inp.value) || S.wirdNum;
-  S.wirdNum = Math.max(min, Math.min(max, current + delta * step));
+  S.wirdNum = Math.max(min, current + delta * step);
   inp.value = S.wirdNum;
 }
 
@@ -1689,12 +1692,9 @@ function onWirdNumInput(inp) {
 }
 
 function onWirdNumBlur(inp) {
-  // Clamp and clean on blur
-  const min = 1;
-  const max = S.wirdType==='pages' ? 30 : 300;
+  // Clamp to min only, no upper limit
   let v = parseInt(inp.value);
-  if(isNaN(v) || v < min) v = min;
-  if(v > max) v = max;
+  if(isNaN(v) || v < 1) v = 1;
   S.wirdNum = v;
   inp.value = v;
 }
@@ -2082,18 +2082,61 @@ function clearBookmarks() {
 }
 
 function resetProgress() {
-  if(confirm('تحذير! سيتم مسح كل بيانات القراءة والتقدم. هل أنت متأكد؟')) {
-    S.completedJuz=[];
-    S.completedAyahs=[];
-    S.readingDates=[];
-    S.dailyWird={};
-    S.currentStreak=0;
-    S.longestStreak=0;
-    S.searchCount=0;
-    saveS();
-    showToast('تم إعادة تعيين التقدم');
-    renderHome();
-  }
+  if(!confirm('⚠️ تحذير: سيتم مسح كل بيانات القراءة والتقدم.\nهل أنت متأكد؟')) return;
+  S.completedJuz=[];
+  S.completedAyahs=[];
+  S.readingDates=[];
+  S.dailyWird={};
+  S.currentStreak=0;
+  S.longestStreak=0;
+  S.searchCount=0;
+  S.completedPages=[];
+  S.readingPos=null;
+  try { localStorage.removeItem('wird_pageMap'); } catch(e){}
+  saveS();
+  showToast('تم إعادة تعيين التقدم');
+  renderHome();
+  if(S.currentView==='progress') renderProgress();
+}
+
+function resetAll() {
+  if(!confirm('⚠️ تحذير شديد!\nسيتم مسح جميع البيانات والإعدادات تماماً كأنك تستخدم التطبيق لأول مرة.\n\nهل أنت متأكد؟')) return;
+  if(!confirm('🚨 تأكيد أخير!\nلا يمكن التراجع عن هذا الإجراء.\nهل تريد حقاً مسح كل شيء؟')) return;
+  try {
+    localStorage.removeItem('wird_state');
+    localStorage.removeItem('wird_pageMap');
+  } catch(e){}
+  // Reset to factory defaults
+  S = {
+    plan:30, startDate:today(),
+    completedJuz:[], completedAyahs:[],
+    bookmarks:[], readingDates:[],
+    currentStreak:0, longestStreak:0,
+    fontSize:'md', darkMode:false, showTafsir:false,
+    reciter:'ar.alafasy',
+    searchCount:0,
+    lastJuz:1, lastSurah:1,
+    currentView:'home',
+    rdrMode:'juz', currentRdrNum:1,
+    wirdType:'ayahs',
+    wirdNum:20,
+    notifEnabled:false,
+    notifTime:'08:00',
+    dailyWird:{},
+    readingPos: null,
+    completedPages: [],
+  };
+  pageAyahMap = {};
+  // Reset UI
+  document.documentElement.classList.remove('dark');
+  const main = document.getElementById('main');
+  ['sm','md','lg','xl'].forEach(x => main.classList.remove('font-'+x));
+  main.classList.add('font-md');
+  saveS();
+  renderHome();
+  renderSettings();
+  showView('home');
+  showToast('✅ تم إعادة ضبط التطبيق بالكامل');
 }
 
 /* ═══════════════════════════════════════════
