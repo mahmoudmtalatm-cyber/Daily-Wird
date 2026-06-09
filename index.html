@@ -212,6 +212,31 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 .aact-audio{background:var(--b50);color:var(--b600);min-width:32px}
 .aact-audio.playing{background:var(--b500);color:white;animation:pulse-ring .9s ease-in-out infinite}
 @keyframes pulse-ring{0%,100%{box-shadow:0 0 0 0 rgba(59,130,246,.4)}50%{box-shadow:0 0 0 5px rgba(59,130,246,0)}}
+.aact-reciter{background:var(--bg-alt);color:var(--tx2);font-size:.65rem;padding:5px 8px;border-radius:999px;border:1.5px dashed var(--border);cursor:pointer;display:none;gap:3px;align-items:center;transition:all var(--tr)}
+.aact-reciter.visible{display:inline-flex}
+.aact-reciter:hover{border-color:var(--b400);color:var(--b600)}
+
+/* RECITER PICKER MODAL */
+#reciter-modal{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s ease}
+#reciter-modal.open{opacity:1;pointer-events:all}
+.reciter-sheet{background:var(--surface);border-radius:var(--r28) var(--r28) 0 0;padding:20px 16px 32px;width:100%;max-width:600px;transform:translateY(100%);transition:transform .3s cubic-bezier(.34,1.2,.64,1)}
+@media(min-width:600px){.reciter-sheet{max-width:720px}}
+#reciter-modal.open .reciter-sheet{transform:translateY(0)}
+.reciter-sheet-ttl{font-size:1rem;font-weight:800;color:var(--tx);text-align:center;margin-bottom:4px}
+.reciter-sheet-sub{font-size:.78rem;color:var(--tx2);text-align:center;margin-bottom:18px}
+.reciter-list{display:flex;flex-direction:column;gap:8px}
+.reciter-opt{display:flex;align-items:center;gap:12px;padding:13px 14px;border-radius:var(--r20);border:1.5px solid var(--border-soft);background:var(--surface-tinted);cursor:pointer;transition:all var(--tr)}
+.reciter-opt:active{transform:scale(.98)}
+.reciter-opt.selected{border-color:var(--b400);background:var(--b50)}
+.dark .reciter-opt.selected{background:rgba(59,130,246,.12)}
+.reciter-opt-icon{width:38px;height:38px;border-radius:50%;background:var(--b100);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.dark .reciter-opt-icon{background:rgba(59,130,246,.18)}
+.reciter-opt-name{font-size:.95rem;font-weight:700;color:var(--tx)}
+.reciter-opt-sub{font-size:.72rem;color:var(--tx2);margin-top:2px}
+.reciter-opt-check{margin-right:auto;width:20px;height:20px;border-radius:50%;background:var(--b500);display:none;align-items:center;justify-content:center}
+.reciter-opt.selected .reciter-opt-check{display:flex}
+.reciter-sheet-cancel{margin-top:12px;width:100%;padding:12px;border-radius:var(--r12);background:var(--bg-alt);color:var(--tx2);font-size:.88rem;font-weight:700;font-family:var(--fu);border:none;cursor:pointer;transition:all var(--tr)}
+.reciter-sheet-cancel:active{background:var(--border)}
 .aact-num{margin-right:auto;font-size:.72rem;color:var(--tx3);margin-inline-start:auto;padding:4px 8px;background:var(--bg-alt);border-radius:999px;font-family:var(--fu)}
 
 /* SKELETON */
@@ -883,6 +908,16 @@ body::before{content:'';position:fixed;inset:0;background-image:url("data:image/
 </div>
 <div id="toast"></div>
 
+<!-- RECITER PICKER MODAL -->
+<div id="reciter-modal" onclick="closeReciterModal(event)">
+  <div class="reciter-sheet">
+    <div class="reciter-sheet-ttl">🎙️ اختر القارئ</div>
+    <div class="reciter-sheet-sub">سيُحفظ اختيارك ويمكنك تغييره في أي وقت</div>
+    <div class="reciter-list" id="reciter-list"></div>
+    <button class="reciter-sheet-cancel" onclick="closeReciterModal({target:document.getElementById('reciter-modal')})">إلغاء</button>
+  </div>
+</div>
+
 <script>
 /* ═══════════════════════════════════════════
    CONSTANTS
@@ -1278,6 +1313,7 @@ let _markAyahGlobal = { start: null, end: null }; // global ayah number per side
 // ── Ayah reader audio ──
 let _rdrAudio = null;
 let _rdrAudioGlobal = null;     // global ayah number currently loaded
+let _pendingAyahAfterReciter = null; // ayah to play once reciter is picked
 
 const RECITERS = {
   'ar.alafasy':      { label: 'العفاسي',     id: 'ar.alafasy' },
@@ -1790,6 +1826,10 @@ function renderAyahs(ayahs, mode, num) {
           <svg id="aud-ico-${a.number}" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           استمع
         </button>
+        <button class="aact aact-reciter ${S.reciterChosen?'visible':''}" id="rc-btn-${a.number}" onclick="openReciterPicker()" title="تغيير القارئ">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          ${RECITERS[S.reciter]?.label || 'القارئ'}
+        </button>
         <button class="aact aact-tf" onclick="loadTafsir(${a.number},'${a.surah.number}',${a.numberInSurah})">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           تفسير
@@ -1808,6 +1848,13 @@ function renderAyahs(ayahs, mode, num) {
 
 /* ─── AYAH AUDIO (reader) ─── */
 function toggleAyahAudio(globalAyah) {
+  // First ever tap → show reciter picker, then play after selection
+  if(!S.reciterChosen) {
+    _pendingAyahAfterReciter = globalAyah;
+    openReciterPicker();
+    return;
+  }
+
   // If same ayah is playing → pause
   if(_rdrAudio && _rdrAudioGlobal === globalAyah && !_rdrAudio.paused) {
     _rdrAudio.pause();
@@ -1821,7 +1868,10 @@ function toggleAyahAudio(globalAyah) {
     if(_rdrAudioGlobal && _rdrAudioGlobal !== globalAyah) _setAyahAudioIcon(_rdrAudioGlobal, false);
     _rdrAudio = null;
   }
-  // Start playback
+  _playAyah(globalAyah);
+}
+
+function _playAyah(globalAyah) {
   _rdrAudioGlobal = globalAyah;
   _rdrAudio = new Audio(getAudioUrl(globalAyah));
   _rdrAudio.play().catch(() => showToast('تعذر تشغيل الصوت'));
@@ -1838,6 +1888,65 @@ function _setAyahAudioIcon(globalAyah, playing) {
   ico.innerHTML = playing
     ? '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>'
     : '<polygon points="5 3 19 12 5 21 5 3"/>';
+}
+
+function openReciterPicker() {
+  // Render options
+  const list = document.getElementById('reciter-list');
+  list.innerHTML = '';
+  const RECITER_META = {
+    'ar.alafasy':           { name: 'مشاري العفاسي',        sub: 'كويتي · رواية حفص' },
+    'ar.abdurrahmaansudais':{ name: 'عبد الرحمن السديس',    sub: 'إمام المسجد الحرام' },
+    'ar.husary':            { name: 'محمود خليل الحصري',    sub: 'مصري · رواية حفص' },
+    'ar.muhammadayyoub':    { name: 'محمد أيوب',            sub: 'سعودي · رواية حفص' },
+    'ar.mahermuaiqly':      { name: 'ماهر المعيقلي',        sub: 'إمام المسجد الحرام' },
+  };
+  const ICONS = ['🎙️','🕌','📖','🎶','🌙'];
+  Object.entries(RECITER_META).forEach(([id, meta], i) => {
+    const sel = (S.reciter || 'ar.alafasy') === id;
+    const el = document.createElement('div');
+    el.className = 'reciter-opt' + (sel ? ' selected' : '');
+    el.innerHTML = `
+      <div class="reciter-opt-icon">${ICONS[i]}</div>
+      <div>
+        <div class="reciter-opt-name">${meta.name}</div>
+        <div class="reciter-opt-sub">${meta.sub}</div>
+      </div>
+      <div class="reciter-opt-check">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>`;
+    el.onclick = () => selectReciter(id);
+    list.appendChild(el);
+  });
+  document.getElementById('reciter-modal').classList.add('open');
+}
+
+function closeReciterModal(e) {
+  if(!e || e.target === document.getElementById('reciter-modal')) {
+    document.getElementById('reciter-modal').classList.remove('open');
+    // If dismissed without choosing and no reciter chosen yet, clear pending
+    if(!S.reciterChosen) _pendingAyahAfterReciter = null;
+  }
+}
+
+function selectReciter(id) {
+  S.reciter = id;
+  S.reciterChosen = true;
+  saveS();
+  document.getElementById('reciter-modal').classList.remove('open');
+
+  // Show the reciter change button on all visible ayah cards and update label
+  document.querySelectorAll('.aact-reciter').forEach(btn => {
+    btn.classList.add('visible');
+    btn.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> ${RECITERS[id]?.label || 'القارئ'}`;
+  });
+
+  // If there's a pending ayah to play, play it now
+  if(_pendingAyahAfterReciter !== null) {
+    const g = _pendingAyahAfterReciter;
+    _pendingAyahAfterReciter = null;
+    _playAyah(g);
+  }
 }
 
 async function loadTafsir(globalN, surahN, ayahN) {
@@ -2564,7 +2673,7 @@ function resetAll() {
     bookmarks:[], readingDates:[],
     currentStreak:0, longestStreak:0,
     fontSize:'md', darkMode:false, showTafsir:false,
-    reciter:'ar.alafasy',
+    reciter:'ar.alafasy', reciterChosen:false,
     searchCount:0,
     lastJuz:1, lastSurah:1,
     currentView:'home',
